@@ -7,6 +7,7 @@ import { IoBagHandleOutline } from "react-icons/io5";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import { FaArrowLeft } from "react-icons/fa";
+import { Link } from 'react-router-dom';
 
 function Header() {
   const [categoryStyle, SetCategoryStyle] = useState(false)
@@ -18,16 +19,18 @@ function Header() {
       <header className=' relative  border max-1024:border-0'>
         <div className='w-[95%] mx-auto  flex justify-between items-center '>
           <div className='flex items-center'>
+            <Link to={'/'}>
             <img className='w-[111px] h-[20px] mr-[25px] max-1024:my-[13px]' src="/public/assets/img/logo-guess-header.svg" alt="GuessLogo" />
+            </Link>
             <ul className='flex max-1024:hidden'>
               {
                 categoryAll ? categoryAll.map((item, i) => <li key={i} className='group text-[.875rem] border-b border-b-transparent hover:border-b-[#000] tracking-[.2em] py-[18px]   mx-3 cursor-pointer '>{item.name}
                   <div className='absolute w-full top-[57px] left-0 group-hover:block hidden z-50 p-[30px] bg-[#fff] '>
                     <div className='flex'>
                       <ul className='!px-[80px]'>
-                        <li className='font-[600] pb-[8px] hover:underline'>View all</li>
+                        <Link to={`/product/all/${item.id}`}><li className='font-[600] pb-[8px] hover:underline'>View all</li></Link>     
                         {
-                          item.Subcategory.map((s, i) => { return (<li key={i} className='py-[8px] hover:underline'>{s.name}</li>) })
+                          item.Subcategory.map((s, i) => { return (<Link to={`/product/${s.id}`}><li key={i} className='py-[8px] hover:underline'>{s.name}</li></Link>) })
                         }
                       </ul>
                       <img className='w-[384px]' src={`/public/assets/img/headerList${i}.webp`} alt="" />

@@ -1,24 +1,21 @@
-import { useContext } from "react"
-import Header from "./components/header/Header"
-import EntryNews from "./components/main/EntryNews"
-import OurBest from "./components/main/OurBest"
-import ProductSlider from "./components/main/ProductSlider"
-import SoftEmbrace from "./components/main/SoftEmbrace"
-import { DATA } from "./context/DataContext"
+
+import { Route, Routes } from "react-router-dom"
+import Layout from "./layout/Layout"
+import Main from "./components/main/Main"
+import ProductCat from "./components/main/ProductCat"
 
 function App() {
-  const { AllBags } = useContext(DATA)
-  const { AllShirt } = useContext(DATA)
+
   return (
     <>
-      <Header />
-      <main>
-        <EntryNews />
-        <OurBest />
-        <SoftEmbrace />
-        <ProductSlider title="We Think You’ll Like These" Product={AllShirt} />
-        <ProductSlider Product={AllBags} />
-      </main>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route  path="/" element={<Main/>}/>
+          <Route  path="/product/:subId" element={<ProductCat/>}/>
+          <Route  path="/product/all/:catId" element={<ProductCat/>}/>
+
+        </Route>
+      </Routes>
     </>
   )
 }
