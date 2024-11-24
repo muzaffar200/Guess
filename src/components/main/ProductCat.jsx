@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { IoIosArrowBack, IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 import { Link, useParams } from 'react-router-dom';
 import { getCategory, getSubCategory } from '../../service/api';
+import { FaCheck } from "react-icons/fa6";
 
 function ProductCat() {
     const [Viwe, SetViwe] = useState(false)
@@ -10,11 +11,14 @@ function ProductCat() {
     const [SubidData, SetSubidData] = useState(null)
     const [Page, SetPage] = useState(1)
     const { subId, catId } = useParams()
+    const [CardLayout, SetCardLayout] = useState(4)
+    const [size, Setsize] = useState([])
+    const [toggleSize, SetToggleSize] = useState(false)
 
     useEffect(() => {
         subId ? getSubCategory(subId, limit, Page).then(res => SetSubidData(res)) :
             getCategory(catId, limit, Page).then(res => SetSubidData(res))
-      
+
     }, [catId, subId, limit, Page])
 
     useEffect(() => {
@@ -25,6 +29,24 @@ function ProductCat() {
         let newPage = Page + a
         newPage > 0 && SubidData.meta.totalPages >= newPage ? SetPage(newPage) : ''
     }
+    function addSize(selecSize) {
+        const test = size.includes(selecSize)
+        if (!test) {
+            Setsize([...size, selecSize])
+        }
+        else {
+            Setsize(size.filter(item => item != selecSize))
+        }
+
+
+    }
+    const FilterData = {
+        size: ['S', 'M', 'L', 'XL', 'XLL'],
+        color: ['Green', 'Red', 'Blue', 'Yellow', 'Black', 'White', 'Orange', 'Purple', 'Indigo', 'Violet']
+    }
+   function handleSizeToggle(){
+    SetToggleSize(!toggleSize)
+   }
     return (
         <main className='w-[95%] m-auto'>
             <div className=' flex justify-end'>
@@ -54,9 +76,9 @@ function ProductCat() {
                     <div className='flex items-center relative gap-[15px]'>
                         <div>
                             <span>View</span>
-                            <span className=' px-[5px]'>2</span>
-                            <span className=' px-[5px] border-l border-r'>4</span>
-                            <span className=' px-[5px]'>6</span>
+                            <span onClick={() => { SetCardLayout(2) }} className=' px-[5px]'>2</span>
+                            <span onClick={() => { SetCardLayout(4) }} className=' px-[5px] border-l border-r'>4</span>
+                            <span onClick={() => { SetCardLayout(6) }} className=' px-[5px]'>6</span>
                         </div>
                         <div className=''>
                             <p onClick={() => { SetFeatured(!Featured) }} className=' cursor-pointer flex items-center underline '>Featured <IoIosArrowDown className='ml-[5px]' /></p>
@@ -70,15 +92,34 @@ function ProductCat() {
             </div>
             <div className='flex'>
                 <div className='w-[20%] mr-[50px]'>
-                    <div className='border-b border-black pt-[10px]  !pb-[20px]'>
-                        <div className=' flex justify-between items-center '><p className='text-[17px]'>Size</p>< IoIosArrowDown className='text-[20px]' /></div>
+                    <div className='border-b border-black pt-[10px] !pb-[15px] relative'>
+                        <div onClick={handleSizeToggle} className='flex justify-between items-center'>
+                            <p className='text-[17px]'>Size</p>
+                            <IoIosArrowDown className={`text-[20px] duration-500  ${toggleSize?'rotate-180':'rotate-0'}`} />
+                        </div>
+                        <div
+                            className={`transition-all duration-500 ease-in-out overflow-hidden ${toggleSize ? 'max-h-[149px]' : 'max-h-0'}`}
+                        >
+                            {
+                                FilterData.size.map((item, i) =>
+                                    <div onClick={() => { addSize(item) }} className='flex items-center mb-[5px] mt-[10px]'>
+                                        <div className='w-[16px] flex items-center justify-center h-[16px] rounded-[50%] border border-black mr-[10px]'>
+                                            <FaCheck className={`text-[10px] `} style={{ display: size.includes(item) ? 'block' : 'none' }} />
+                                        </div>
+                                        <span className='text-[13px]'>{item}</span>
+                                    </div>
+                                )
+                            }
+                        </div>
                     </div>
                 </div>
-                <div className='flex flex-wrap gap-5 w-[80%]'>
+
+
+                <div className='flex flex-wrap gap-[20px] w-[80%] '>
                     {
                         SubidData && SubidData.data.map((item, i) => {
                             return (
-                                <div className='text-center w-[18%] '>
+                                <div className={`text-center `} style={{ width: `${(100 / CardLayout) - 1.5}% `, transition: 'width 0.5s ease-in-out' }}>
                                     <div className='group relative'>
                                         <img className='' src={item.images[0]} alt="" />
                                         <img className=' absolute top-0 left-0 hidden group-hover:inline' src={item.images[1]} alt="" />
