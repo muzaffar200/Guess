@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { IoIosArrowBack, IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getCategory, getSubCategory } from '../../service/api';
-import { FaCheck } from "react-icons/fa6";
+import Filter from './Filter';
+import { FilterData } from '../../context/FilterContext';
+import { HiOutlineInboxStack } from "react-icons/hi2";
 
 function ProductCat() {
     const [Viwe, SetViwe] = useState(false)
@@ -12,14 +14,13 @@ function ProductCat() {
     const [Page, SetPage] = useState(1)
     const { subId, catId } = useParams()
     const [CardLayout, SetCardLayout] = useState(4)
-    const [size, Setsize] = useState([])
-    const [toggleSize, SetToggleSize] = useState(false)
-
+    const { toggleFilter, OpenFilter, addSize, size, addColor, color } = useContext(FilterData)
     useEffect(() => {
-        subId ? getSubCategory(subId, limit, Page).then(res => SetSubidData(res)) :
-            getCategory(catId, limit, Page).then(res => SetSubidData(res))
+        subId ? getSubCategory(subId, limit, Page, size.join(','), color.join(',')).then(res => SetSubidData(res)) :
+            getCategory(catId, limit, Page, size.join(','), color.join(',')).then(res => SetSubidData(res))
 
-    }, [catId, subId, limit, Page])
+    }, [catId, subId, limit, Page, size, color])
+
 
     useEffect(() => {
         SetPage(1)
@@ -29,24 +30,8 @@ function ProductCat() {
         let newPage = Page + a
         newPage > 0 && SubidData.meta.totalPages >= newPage ? SetPage(newPage) : ''
     }
-    function addSize(selecSize) {
-        const test = size.includes(selecSize)
-        if (!test) {
-            Setsize([...size, selecSize])
-        }
-        else {
-            Setsize(size.filter(item => item != selecSize))
-        }
 
 
-    }
-    const FilterData = {
-        size: ['S', 'M', 'L', 'XL', 'XLL'],
-        color: ['Green', 'Red', 'Blue', 'Yellow', 'Black', 'White', 'Orange', 'Purple', 'Indigo', 'Violet']
-    }
-   function handleSizeToggle(){
-    SetToggleSize(!toggleSize)
-   }
     return (
         <main className='w-[95%] m-auto'>
             <div className=' flex justify-end'>
@@ -66,7 +51,7 @@ function ProductCat() {
                             <IoIosArrowBack onClick={() => { changePage(-1) }} className='cursor-pointer' />
                             <select value={Page} onChange={(e) => { SetPage(Number(e.target.value)) }}>
                                 {
-                                    SubidData && Array(SubidData.meta.totalPages).fill("").map((item, i) => <option >{i + 1}</option>)
+                                    SubidData && Array(SubidData.meta.totalPages).fill("").map((item, i) => <option key={i} >{i + 1}</option>)
                                 }
                             </select>
                             <span>of {SubidData && SubidData.meta.totalPages}</span>
@@ -92,10 +77,30 @@ function ProductCat() {
             </div>
             <div className='flex'>
                 <div className='w-[20%] mr-[50px]'>
-                    <div className='border-b border-black pt-[10px] !pb-[15px] relative'>
-                        <div onClick={handleSizeToggle} className='flex justify-between items-center'>
+                    <Filter
+                        title='Size'
+                        options={['S', 'M', 'L', 'XL', 'XXL']}
+                        isOpen={OpenFilter['Size']}
+                        toggleFilter={() => toggleFilter("Size")}
+                        addOption={addSize}
+                        type={'size'}
+                        element={size}
+                    />
+                    <Filter
+                        title='Color'
+                        options={['Green', 'Red', 'Blue', 'Yellow', 'Black', 'White', 'Orange', 'Purple', 'Indigo', 'Violet']}
+                        isOpen={OpenFilter['Color']}
+                        toggleFilter={() => toggleFilter("Color")}
+                        addOption={addColor}
+                        element={color}
+                        type={'color'}
+                    />
+
+                    {/* Color Filter */}
+                    {/* <div className='border-b border-black pt-[10px] !pb-[15px] relative'>
+                        <div  className='flex justify-between items-center'>
                             <p className='text-[17px]'>Size</p>
-                            <IoIosArrowDown className={`text-[20px] duration-500  ${toggleSize?'rotate-180':'rotate-0'}`} />
+                            <IoIosArrowDown  className={`text-[20px] duration-500  ${toggleSize?'rotate-180':'rotate-0'}`} />
                         </div>
                         <div
                             className={`transition-all duration-500 ease-in-out overflow-hidden ${toggleSize ? 'max-h-[149px]' : 'max-h-0'}`}
@@ -111,15 +116,16 @@ function ProductCat() {
                                 )
                             }
                         </div>
-                    </div>
+                    </div> */}
+
                 </div>
 
 
                 <div className='flex flex-wrap gap-[20px] w-[80%] '>
                     {
-                        SubidData && SubidData.data.map((item, i) => {
+                        SubidData?.data?.length > 0 ? SubidData.data.map((item, i) => {
                             return (
-                                <div className={`text-center `} style={{ width: `${(100 / CardLayout) - 1.5}% `, transition: 'width 0.5s ease-in-out' }}>
+                                <div key={i} className={`text-center `} style={{ width: `${(100 / CardLayout) - 1.5}% `, transition: 'width 0.5s ease-in-out' }}>
                                     <div className='group relative'>
                                         <img className='' src={item.images[0]} alt="" />
                                         <img className=' absolute top-0 left-0 hidden group-hover:inline' src={item.images[1]} alt="" />
@@ -131,7 +137,13 @@ function ProductCat() {
                                     </div>
                                 </div>
                             )
-                        })
+                        }) : (
+                            <div className="absolute top-[50%] left-[50%] translate-x-[50%] translate-y-[50%]">
+                                    <HiOutlineInboxStack className='text-[35px] m-auto text-[#8a8a8b]' />
+                                    <p className="">No data available</p>
+                            </div>
+                        )
+
                     }
                 </div>
             </div>

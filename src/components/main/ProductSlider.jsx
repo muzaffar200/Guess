@@ -1,4 +1,3 @@
-import React, { useContext } from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Mousewheel } from 'swiper/modules';
 import 'swiper/css';

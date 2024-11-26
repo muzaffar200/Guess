@@ -30,7 +30,7 @@ function Header() {
                       <ul className='!px-[80px]'>
                         <Link to={`/product/all/${item.id}`}><li className='font-[600] pb-[8px] hover:underline'>View all</li></Link>     
                         {
-                          item.Subcategory.map((s, i) => { return (<Link to={`/product/${s.id}`}><li key={i} className='py-[8px] hover:underline'>{s.name}</li></Link>) })
+                          item.Subcategory.map((s, i) => { return (<Link key={i} to={`/product/${s.id}`}><li  className='py-[8px] hover:underline'>{s.name}</li></Link>) })
                         }
                       </ul>
                       <img className='w-[384px]' src={`/public/assets/img/headerList${i}.webp`} alt="" />
