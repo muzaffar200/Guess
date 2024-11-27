@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { IoIosArrowBack, IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { getCategory, getSubCategory } from '../../service/api';
 import Filter from './Filter';
 import { FilterData } from '../../context/FilterContext';
@@ -9,29 +9,43 @@ import { HiOutlineInboxStack } from "react-icons/hi2";
 function ProductCat() {
     const [Viwe, SetViwe] = useState(false)
     const [Featured, SetFeatured] = useState(false)
-    const [limit, SetLimit] = useState('10')
     const [SubidData, SetSubidData] = useState(null)
-    const [Page, SetPage] = useState(1)
     const { subId, catId } = useParams()
     const [CardLayout, SetCardLayout] = useState(4)
-    const { toggleFilter, OpenFilter, addSize, size, addColor, color } = useContext(FilterData)
+    const [searchParams, setSearchParams] = useSearchParams();
+    const { toggleFilter, OpenFilter, addColor, color } = useContext(FilterData)
+
+
+    const Page = searchParams.get('page') || 1;
+
+    const limit = searchParams.get('limit') || 10;
+    const size = searchParams.get('size') || ''
+
+
     useEffect(() => {
-        subId ? getSubCategory(subId, limit, Page, size.join(','), color.join(',')).then(res => SetSubidData(res)) :
-            getCategory(catId, limit, Page, size.join(','), color.join(',')).then(res => SetSubidData(res))
+        subId ? getSubCategory(subId, limit, Page, size, color.join(',')).then(res => SetSubidData(res)) :
+            getCategory(catId, limit, Page, size, color.join(',')).then(res => SetSubidData(res))
 
     }, [catId, subId, limit, Page, size, color])
 
 
-    useEffect(() => {
-        SetPage(1)
-    }, [limit]);
 
-    function changePage(a) {
-        let newPage = Page + a
-        newPage > 0 && SubidData.meta.totalPages >= newPage ? SetPage(newPage) : ''
+    function changePage(increment) {
+        const newPage = parseInt(Page) + increment;
+        if (newPage > 0 && newPage <= (SubidData?.meta.totalPages || 0)) {
+            setSearchParams({ 'page': newPage });
+        }
     }
 
+    function addSize(selecSize) {
+        const params = Object.fromEntries(searchParams)
+        const sizes = params.size ? params.size.split(',') : []
+        const updatedSizes = sizes.includes(selecSize) ? sizes.filter(i => i !== selecSize) : [...sizes, selecSize]
+        updatedSizes != '' ? setSearchParams({ ...params, 'size': updatedSizes.join(',') }) :
+            setSearchParams(searchParams.delete('size'))
 
+
+    }
     return (
         <main className='w-[95%] m-auto'>
             <div className=' flex justify-end'>
@@ -42,14 +56,15 @@ function ProductCat() {
                             <div onClick={() => { SetViwe(!Viwe) }} className='flex items-center cursor-pointer'><span className='underline'>Viwe {limit}</span>
                                 < IoIosArrowDown className='text-[17px] ml-[5px]' /></div>
                             <div className={`bg-white border px-[20px] absolute top-[33px] left-0 w-[100px] z-10 ${Viwe ? 'block' : 'hidden'}`} >
-                                <p onClick={() => { SetLimit('5') }} className='py-[5px] cursor-pointer'>Viwe 5</p>
-                                <p onClick={() => { SetLimit('10') }} className='py-[5px] cursor-pointer'>Viwe 10</p>
-                                <p onClick={() => { SetLimit('15') }} className='py-[5px] cursor-pointer'>Viwe 15</p>
+                                <p onClick={() => { setSearchParams({ 'limit': 5, 'page': 1 }); }} className='py-[5px] cursor-pointer'>Viwe 5</p>
+                                <p onClick={() => { setSearchParams({ 'limit': 10, 'page': 1 }); }} className='py-[5px] cursor-pointer'>Viwe 10</p>
+                                <p onClick={() => { setSearchParams({ 'limit': 15, 'page': 1 }); }} className='py-[5px] cursor-pointer'>Viwe 15</p>
                             </div>
                         </div>
+
                         <div className='flex items-center '>
                             <IoIosArrowBack onClick={() => { changePage(-1) }} className='cursor-pointer' />
-                            <select value={Page} onChange={(e) => { SetPage(Number(e.target.value)) }}>
+                            <select value={Page} onChange={(e) => { setSearchParams({ 'page': e.target.value }) }} >
                                 {
                                     SubidData && Array(SubidData.meta.totalPages).fill("").map((item, i) => <option key={i} >{i + 1}</option>)
                                 }
@@ -84,7 +99,7 @@ function ProductCat() {
                         toggleFilter={() => toggleFilter("Size")}
                         addOption={addSize}
                         type={'size'}
-                        element={size}
+                        element={size.split(',')}
                     />
                     <Filter
                         title='Color'
@@ -95,29 +110,6 @@ function ProductCat() {
                         element={color}
                         type={'color'}
                     />
-
-                    {/* Color Filter */}
-                    {/* <div className='border-b border-black pt-[10px] !pb-[15px] relative'>
-                        <div  className='flex justify-between items-center'>
-                            <p className='text-[17px]'>Size</p>
-                            <IoIosArrowDown  className={`text-[20px] duration-500  ${toggleSize?'rotate-180':'rotate-0'}`} />
-                        </div>
-                        <div
-                            className={`transition-all duration-500 ease-in-out overflow-hidden ${toggleSize ? 'max-h-[149px]' : 'max-h-0'}`}
-                        >
-                            {
-                                FilterData.size.map((item, i) =>
-                                    <div onClick={() => { addSize(item) }} className='flex items-center mb-[5px] mt-[10px]'>
-                                        <div className='w-[16px] flex items-center justify-center h-[16px] rounded-[50%] border border-black mr-[10px]'>
-                                            <FaCheck className={`text-[10px] `} style={{ display: size.includes(item) ? 'block' : 'none' }} />
-                                        </div>
-                                        <span className='text-[13px]'>{item}</span>
-                                    </div>
-                                )
-                            }
-                        </div>
-                    </div> */}
-
                 </div>
 
 
@@ -139,8 +131,8 @@ function ProductCat() {
                             )
                         }) : (
                             <div className="absolute top-[50%] left-[50%] translate-x-[50%] translate-y-[50%]">
-                                    <HiOutlineInboxStack className='text-[35px] m-auto text-[#8a8a8b]' />
-                                    <p className="">No data available</p>
+                                <HiOutlineInboxStack className='text-[35px] m-auto text-[#8a8a8b]' />
+                                <p className="">No data available</p>
                             </div>
                         )
 
