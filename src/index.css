@@ -4,8 +4,8 @@
 
 *{
   box-sizing: border-box;
-}
-/* @font-face {
+} 
+@font-face {
   font-family: 'DisPro';
   src: url('/assets/fonts/FreightDispProLight-Regular.woff2') format('woff2');
   font-weight: normal;
@@ -34,6 +34,12 @@
   src: url('assets/fonts/FuturaCyrillicMedium.woff') format('woff');
 }
 
+/* @font-face {
+  font-family: 'FuturaLight';
+  font-style: normal;
+  font-weight: normal;
+  src: url('assets/fonts/FuturaPTLight.otf') format('otf');
+} */
 .luxurious-script-regular {
   font-family: "Luxurious Script", cursive;
   font-weight: 400;
@@ -43,12 +49,12 @@
 .FreightDis {
   font-family: 'DisPro', sans-serif;
 }
-.FuturaLight {
-  font-family: 'Futura PT light', sans-serif;
+.fontTest{
+  font-family: 'FuturaLight', sans-serif;
 }
 .FuturaMedium {
   font-family: 'Futura PT Medium', sans-serif;
-} */
+}
 .SoftH2 {
   font-size: clamp(2rem, 6vw, 7.5rem);
 }
@@ -57,3 +63,24 @@
   font-size: clamp(1rem, 1.2vw, 2rem);
   margin-bottom: 15px;
 }
+
+  .price{
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  }
+  @media only screen and (max-width: 1024px){
+    .cardProduct{
+      flex: 0 1 calc(100% / 3 - 16px);
+      margin: 0;
+      padding: 0;
+    }
+    .filterrr{
+      overflow: hidden;
+    }
+  }
+  @media only screen and (max-width: 768px){
+    .cardProduct{
+      flex: 0 1 calc(100% / 2 - 16px);
+    }
+  }
+
+  
