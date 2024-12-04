@@ -11,16 +11,18 @@ import { Link } from 'react-router-dom';
 
 function Header() {
   const [categoryStyle, SetCategoryStyle] = useState(false)
-  const { categoryAll } = useContext(DATA)
+  const { categoryAll,wishlistDATA } = useContext(DATA)
   const [DataSubcategory, setDataSubcategory] = useState(null);
   const [openSubcategory, setOpenSubcategory] = useState(true)
+console.log(wishlistDATA);
+
   return (
     <>
       <header className=' relative  border max-1024:border-0'>
         <div className='w-[95%] mx-auto  flex justify-between items-center '>
           <div className='flex items-center'>
             <Link to={'/'}>
-            <img className='w-[111px] h-[20px] mr-[25px] max-1024:my-[13px]' src="/public/assets/img/logo-guess-header.svg" alt="GuessLogo" />
+              <img className='w-[111px] h-[20px] mr-[25px] max-1024:my-[13px]' src="/public/assets/img/logo-guess-header.svg" alt="GuessLogo" />
             </Link>
             <ul className='flex max-1024:hidden'>
               {
@@ -28,9 +30,9 @@ function Header() {
                   <div className='absolute w-full top-[57px] left-0 group-hover:block hidden z-50 p-[30px] bg-[#fff] '>
                     <div className='flex'>
                       <ul className='!px-[80px]'>
-                        <Link to={`/product/all/${item.id}`}><li className='font-[600] pb-[8px] hover:underline'>View all</li></Link>     
+                        <Link to={`/product/all/${item.id}`}><li className='font-[600] pb-[8px] hover:underline'>View all</li></Link>
                         {
-                          item.Subcategory.map((s, i) => { return (<Link key={i} to={`/product/${s.id}`}><li  className='py-[8px] hover:underline'>{s.name}</li></Link>) })
+                          item.Subcategory.map((s, i) => { return (<Link key={i} to={`/product/${s.id}`}><li className='py-[8px] hover:underline'>{s.name}</li></Link>) })
                         }
                       </ul>
                       <img className='w-[384px]' src={`/public/assets/img/headerList${i}.webp`} alt="" />
@@ -46,8 +48,8 @@ function Header() {
             <div className="flex items-center border-l-2 border-l-[#f2f2f2] gap-[15px] max-1024:border-0">
               <IoIosSearch className="text-[24px] ml-[10px] max-1024:text-[29px]" />
               <div className="relative mr-[5px]">
-                <IoMdHeartEmpty className="text-[24px] max-1024:text-[29px]" />
-                <span className="absolute right-[-9px] top-[3px] max-1024:top-[6px] text-xs ">1</span>
+                <Link to={'/wishlist'}><IoMdHeartEmpty className="text-[24px] max-1024:text-[29px]" /></Link>
+                <span className="absolute right-[-9px] top-[3px] max-1024:top-[6px] text-xs ">{wishlistDATA.length?wishlistDATA.length:''}</span>
               </div>
               <IoBagHandleOutline className="text-[24px] max-1024:text-[29px]" />
 

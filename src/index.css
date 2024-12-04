@@ -11,35 +11,17 @@
   font-weight: normal;
   font-style: normal;
 }
-
 @font-face {
-  font-family: 'Futura PT Heavy';
-  font-style: normal;
+  font-family: 'testt';
+  src: url('/assets/fonts/FuturaPTLight.otf');
   font-weight: normal;
-  src: url('assets/fonts/FuturaCyrillicHeavy.woff') format('woff');
+  font-style: normal;
 }
-
-@font-face {
-  font-family: 'Futura PT Light';
-  font-style: normal;
-  font-weight: normal;
-  src: url('assets/fonts/FuturaCyrillicLight.woff') format('woff');
+* {
+  font-family: 'testt', sans-serif;
 }
 
 
-@font-face {
-  font-family: 'Futura PT Medium';
-  font-style: normal;
-  font-weight: normal;
-  src: url('assets/fonts/FuturaCyrillicMedium.woff') format('woff');
-}
-
-/* @font-face {
-  font-family: 'FuturaLight';
-  font-style: normal;
-  font-weight: normal;
-  src: url('assets/fonts/FuturaPTLight.otf') format('otf');
-} */
 .luxurious-script-regular {
   font-family: "Luxurious Script", cursive;
   font-weight: 400;
@@ -48,9 +30,6 @@
 
 .FreightDis {
   font-family: 'DisPro', sans-serif;
-}
-.fontTest{
-  font-family: 'FuturaLight', sans-serif;
 }
 .FuturaMedium {
   font-family: 'Futura PT Medium', sans-serif;
@@ -82,5 +61,16 @@
       flex: 0 1 calc(100% / 2 - 16px);
     }
   }
+  .heart-icon {
+    cursor: pointer;
+    z-index: 2;
+    fill: none;
+    stroke: #808284;
+    stroke-width:1.5 ;
+}
+.inp-price::-webkit-inner-spin-button,
+.inp-price::-webkit-outer-spin-button {
+  display: none;
+}
 
   

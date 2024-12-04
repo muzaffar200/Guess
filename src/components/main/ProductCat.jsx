@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { IoIosArrowBack, IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
-import { useParams, useSearchParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { getCategory, getSubCategory } from '../../service/api';
 import Filter from './Filter';
 import { FilterData } from '../../context/FilterContext';
 import { HiOutlineInboxStack } from "react-icons/hi2";
 import { IoMdClose } from "react-icons/io";
-import { PiX } from 'react-icons/pi';
+import { DATA } from '../../context/DataContext';
 
 
 function ProductCat() {
@@ -17,6 +17,7 @@ function ProductCat() {
     const [CardLayout, SetCardLayout] = useState(4)
     const [searchParams, setSearchParams] = useSearchParams();
     const { toggleFilter, OpenFilter } = useContext(FilterData)
+    const { addToWishlist,wishlistDATA } = useContext(DATA)
 
 
     const Page = searchParams.get('page') || 1;
@@ -24,19 +25,24 @@ function ProductCat() {
     const size = searchParams.get('size') || ''
     const color = searchParams.get('color') || ''
     const discount = searchParams.get('discount') || ''
+    const maxPrice = searchParams.get('maxPrice') || ''
+    const minPrice = searchParams.get('minPrice') || ''
+
+
 
     useEffect(() => {
-        subId ? getSubCategory(subId, limit, Page, size, color, discount).then(res => SetSubidData(res)) :
-            getCategory(catId, limit, Page, size, color, discount).then(res => SetSubidData(res))
+        subId ? getSubCategory(subId, limit, Page, size, color, discount, minPrice, maxPrice).then(res => SetSubidData(res)) :
+            getCategory(catId, limit, Page, size, color, discount, minPrice, maxPrice).then(res => SetSubidData(res))
 
-    }, [catId, subId, limit, Page, size, color])
+    }, [catId, subId, limit, Page, size, color, minPrice, maxPrice])
 
 
 
     function changePage(increment) {
+        const params = Object.fromEntries(searchParams)
         const newPage = parseInt(Page) + increment;
         if (newPage > 0 && newPage <= (SubidData?.meta.totalPages || 0)) {
-            setSearchParams({ 'page': newPage });
+            setSearchParams({ ...params, 'page': newPage });
         }
     }
 
@@ -45,7 +51,7 @@ function ProductCat() {
         const sizes = params.size ? params.size.split(',') : []
         const updatedSizes = sizes.includes(selecSize) ? sizes.filter(i => i !== selecSize) : [...sizes, selecSize]
         if (updatedSizes != '') {
-            setSearchParams({ ...params, 'size': updatedSizes.join(',') })
+            setSearchParams({ ...params, 'size': updatedSizes.join(','), 'page': 1 })
         }
         else {
             searchParams.delete('size')
@@ -58,21 +64,42 @@ function ProductCat() {
         const params = Object.fromEntries(searchParams)
         const colors = params.color ? params.color.split(',') : []
         const updatedColors = colors.includes(selecColor) ? colors.filter(i => i !== selecColor) : [...colors, selecColor]
-        updatedColors != '' ? setSearchParams({ ...params, 'color': updatedColors.join(',') }) : setSearchParams(searchParams.delete('color'))
+        if (updatedColors != '') {
+
+            setSearchParams({ ...params, 'color': updatedColors.join(','), 'page': 1 })
+        }
+        else {
+            searchParams.delete('color')
+            setSearchParams(searchParams)
+        }
+    }
+    function addLimit(limit) {
+        const params = Object.fromEntries(searchParams)
+        setSearchParams({ ...params, 'limit': limit, page: 1 })
     }
     function addDiscount() {
-
         const params = Object.fromEntries(searchParams)
         if (params.discount) {
             searchParams.delete('discount')
             setSearchParams(searchParams)
         }
         else {
-            setSearchParams({ ...params, 'discount': true })
+            setSearchParams({ ...params, 'discount': true, 'page': 1 })
         }
-
     }
-    console.log(OpenFilter.MobilFilter)
+    function addPrice(min, max) {
+        const params = Object.fromEntries(searchParams)
+        if (params.maxPrice == max && params.minPrice == min) {
+            searchParams.delete('maxPrice')
+            searchParams.delete('minPrice')
+            setSearchParams(searchParams)
+        }
+        else {
+            setSearchParams({ ...params, 'minPrice': min, 'maxPrice': max, 'page': 1 })
+
+        }
+    }
+
     return (
         <main className='w-[95%] m-auto'>
             <div className=' flex justify-end'>
@@ -83,9 +110,9 @@ function ProductCat() {
                             <div onClick={() => { SetViwe(!Viwe) }} className='flex items-center cursor-pointer'><span className='underline'>Viwe {limit}</span>
                                 < IoIosArrowDown className='text-[17px] ml-[5px]' /></div>
                             <div className={`bg-white border px-[20px] absolute top-[33px] left-0 w-[100px] z-10 ${Viwe ? 'block' : 'hidden'}`} >
-                                <p onClick={() => { setSearchParams({ 'limit': 5, 'page': 1 }); }} className='py-[5px] cursor-pointer'>Viwe 5</p>
-                                <p onClick={() => { setSearchParams({ 'limit': 10, 'page': 1 }); }} className='py-[5px] cursor-pointer'>Viwe 10</p>
-                                <p onClick={() => { setSearchParams({ 'limit': 15, 'page': 1 }); }} className='py-[5px] cursor-pointer'>Viwe 15</p>
+                                <p onClick={() => { addLimit(5) }} className='py-[5px] cursor-pointer'>Viwe 5</p>
+                                <p onClick={() => { addLimit(10) }} className='py-[5px] cursor-pointer'>Viwe 10</p>
+                                <p onClick={() => { addLimit(15) }} className='py-[5px] cursor-pointer'>Viwe 15</p>
                             </div>
                         </div>
 
@@ -134,7 +161,7 @@ function ProductCat() {
                         <div className={`absolute px-[15px] filterrr top-0 left-0 transition-all  w-full duration-500 ease-in-out bg-[#fff] z-10 h-full overflow-hidden   ${OpenFilter['MobilFilter'] ? 'max-h-[100vh]' : 'max-h-0'}`}>
                             <div className='flex items-center justify-between pb-[30px] pt-[20px] border-b border-black'>
                                 <span className='text-[18px]'>Filter</span>
-                                <span className='text-[18px]'>28 Styles</span>
+                                <span className='text-[18px]'>{SubidData && SubidData.meta.totalProducts}Styles</span>
                                 <IoMdClose className='text-[20px]' onClick={() => { toggleFilter('MobilFilter') }} />
                             </div>
                             <Filter
@@ -162,6 +189,15 @@ function ProductCat() {
                                 addDiscount={addDiscount}
                                 type={'discount'}
                                 discount={discount}
+                            />
+                            <Filter
+                                title='Price'
+                                isOpen={OpenFilter['Price']}
+                                toggleFilter={() => toggleFilter("Price")}
+                                type={'price'}
+                                addPrice={addPrice}
+                                maxPrice={maxPrice}
+                                minPrice={minPrice}
                             />
                         </div>
                     </div>
@@ -192,6 +228,16 @@ function ProductCat() {
                             type={'discount'}
                             discount={discount}
                         />
+                        <Filter
+                            title='Price'
+                            isOpen={OpenFilter['Price']}
+                            toggleFilter={() => toggleFilter("Price")}
+                            type={'price'}
+                            addPrice={addPrice}
+                            maxPrice={maxPrice}
+                            minPrice={minPrice}
+
+                        />
                     </div>
                 </div>
 
@@ -200,22 +246,41 @@ function ProductCat() {
                     {
                         SubidData?.data?.length > 0 ? SubidData.data.map((item, i) => {
                             return (
-                                <div key={i} className={`text-center border-box m-0 p-0 cardProduct !max-1024:flex-[0_1_calc((100%/4)-16px)]`} style={{ width: `calc((100% / ${CardLayout}) - 16px)`, transition: 'width 0.5s ease-in-out' }}>
+                                <Link to={`/product/detalis/${item.id}`} key={i} className={`  border-box m-0 p-0 cardProduct !max-1024:flex-[0_1_calc((100%/4)-16px)]`} style={{ width: `calc((100% / ${CardLayout}) - 16px)`, transition: 'width 0.5s ease-in-out' }}>
                                     <div className='group relative'>
                                         <img className='' src={item.images[0]} alt="" />
                                         <img className=' absolute top-0 left-0 hidden group-hover:inline' src={item.images[1]} alt="" />
-                                        <button className='absolute FuturaLight text-[13px] right-[10px] bottom-[10px] border bg-white px-[14px] py-[5px] rounded-[5px]'>Add</button>
+                                        <button className='absolute  text-[13px] right-[10px] bottom-[10px] border bg-white px-[14px] py-[5px] rounded-[5px]'>Add</button>
                                     </div>
-                                    <div className=' FuturaLight '>
-                                        <p className='text-[14px] max-386:text-[12px] FuturaMedium'>{item.name}</p>
-                                        <div className=' FuturaMedium !text-[12px] max-386:text-[10px]'><span>${(item.price - ((item.price * item.discount) / 100)).toFixed(2)}</span><span className='FuturaLight'>({item.discount}% OFF)</span></div>
+                                    <div className='allFont h-[120px]'>
+                                        <div className='flex  justify-between pr-[10px]  items-center py-[7px]'>
+                                            <p className=' !text-[15px] max-386:text-[12px] tracking-[.5px] '>{item.name} </p>
+                                            <svg 
+                                            onClick={(event) => {
+                                                event.preventDefault()
+                                                addToWishlist(item)
+                                            }} 
+                                            style={{fill: wishlistDATA.find((j) => j.id === item.id) ? '#808284' : 'none'
+                                            }}
+                                            className="heart-icon" width="19" height="19" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                            </svg>
+                                        </div>
+                                        <div className='  text-[14px] max-386:text-[10px] tracking-[.5px]'>
+                                            <span className='mr-[5px]' >${item.price}</span>
+                                            <span className='line-through mr-[10px] text-[#71767f]'>${(item.price - ((item.price * item.discount) / 100)).toFixed(2)}</span>
+                                            <span className='text-[#71767f]' >({item.discount}% OFF)</span>
+                                        </div>
                                     </div>
-                                </div>
+                                </Link>
                             )
                         }) : (
-                            <div className="absolute top-[50%] left-[50%] translate-x-[50%] translate-y-[50%]">
-                                <HiOutlineInboxStack className='text-[35px] m-auto text-[#8a8a8b]' />
-                                <p className="">No data available</p>
+                            <div className="  h-[80vh] w-full flex items-center justify-center" >
+                                <div>
+                                    <HiOutlineInboxStack className='text-[35px] m-auto text-[#8a8a8b]' />
+                                    <p className="text-[20px]">No data available</p>
+                                </div>
                             </div>
                         )
                     }

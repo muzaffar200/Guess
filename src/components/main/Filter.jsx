@@ -1,8 +1,12 @@
 import { FaCheck } from "react-icons/fa6";
 import { IoIosArrowDown } from "react-icons/io";
+import { FiMinus } from "react-icons/fi";
+import { useState } from "react";
 
-function Filter({ title, options, isOpen, toggleFilter, addOption, element, type ,addDiscount,discount}) {
-
+function Filter({ title, options, isOpen, toggleFilter, addOption, element, type, addDiscount, discount, addPrice, minPrice, maxPrice }) {
+    const [input1, Setinput1] = useState('')
+    const [input2, Setinput2] = useState('')
+    const PriceNum = [25, 50, 100, 150, 200]
 
     return (
         <div className='border-b border-black py-[18px] relative'>
@@ -39,11 +43,54 @@ function Filter({ title, options, isOpen, toggleFilter, addOption, element, type
                             type == 'discount' ?
                                 <div onClick={addDiscount} className="flex items-center py-[12px]">
                                     <div className='w-[16px] flex items-center justify-center h-[16px] rounded-[50%] border border-black mr-[10px]' >
-                                        <FaCheck className={`text-[10px] `}style={{ display:discount?'block' : 'none' }}  />
+                                        <FaCheck className={`text-[10px] `} style={{ display: discount ? 'block' : 'none' }} />
                                     </div>
                                     <span className='text-[14px]'>Discount</span>
                                 </div>
-                                : ''
+                                :
+                                type == 'price' ?
+                                    <div>
+                                        <div>
+                                            {
+                                                PriceNum.map((item, i) => {
+
+                                                    return (
+                                                        <div key={i} onClick={() => { addPrice(item, item * 2) }} className="flex items-center my-[8px]"  >
+                                                            <div className='w-[16px] flex items-center justify-center h-[16px] rounded-[50%] border border-black mr-[10px]' >
+                                                                <FaCheck className={`text-[10px] `} style={{ display: item == minPrice && item * 2 == maxPrice ? 'block' : 'none' }} />
+                                                            </div>
+                                                            <div className="text-[14px]">
+                                                                <span>{item}$</span>
+                                                                <span className="mx-[5px]">-</span>
+                                                                <span>{item * 2}$</span>
+                                                            </div>
+                                                        </div>
+
+                                                    )
+
+                                                })
+                                            }
+
+                                        </div>
+                                        <div>
+                                            <p className="py-[15px]">Price range:</p>
+                                            <div className=" flex items-center text-[15px]">
+                                                <div className="flex border-b border-black">
+                                                    <span>$</span>
+                                                    <input type="number" className="w-[35px]  inp-price outline-none" onChange={(e) => { Setinput1(e.target.value) }} />
+                                                </div>
+                                                <FiMinus className="mx-[15px]" />
+
+                                                <div className="flex border-b border-black">
+                                                    <span>$</span>
+                                                    <input type="number" className=" inp-price inp-price w-[35px] outline-none" onChange={(e) => { Setinput2(e.target.value) }} />
+                                                </div>
+                                                <span className="border-b border-black ml-[25px] cursor-pointer" onClick={()=>{addPrice(input1,input2)}}>Apply</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    : ''
+
 
 
                 }
