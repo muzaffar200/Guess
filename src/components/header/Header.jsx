@@ -11,10 +11,9 @@ import { Link } from 'react-router-dom';
 
 function Header() {
   const [categoryStyle, SetCategoryStyle] = useState(false)
-  const { categoryAll,wishlistDATA } = useContext(DATA)
+  const { categoryAll, wishlistDATA } = useContext(DATA)
   const [DataSubcategory, setDataSubcategory] = useState(null);
   const [openSubcategory, setOpenSubcategory] = useState(true)
-console.log(wishlistDATA);
 
   return (
     <>
@@ -49,7 +48,7 @@ console.log(wishlistDATA);
               <IoIosSearch className="text-[24px] ml-[10px] max-1024:text-[29px]" />
               <div className="relative mr-[5px]">
                 <Link to={'/wishlist'}><IoMdHeartEmpty className="text-[24px] max-1024:text-[29px]" /></Link>
-                <span className="absolute right-[-9px] top-[3px] max-1024:top-[6px] text-xs ">{wishlistDATA.length?wishlistDATA.length:''}</span>
+                <span className="absolute right-[-9px] top-[3px] max-1024:top-[6px] text-xs ">{wishlistDATA.length ? wishlistDATA.length : ''}</span>
               </div>
               <IoBagHandleOutline className="text-[24px] max-1024:text-[29px]" />
 
@@ -71,18 +70,23 @@ console.log(wishlistDATA);
 
           </div>
         </div>
-        <div className={`absolute w-full font-[300] z-10 duration-300 bg-white  ${categoryStyle ? 'right-0' : 'hidden'}`}>
+        <div className={`absolute w-full font-[300] overflow-hidden z-10 duration-300 bg-white  ${categoryStyle ? 'right-0' : 'hidden'}`}>
           <ul >
             <li className=' py-[10px] px-[30px] text-[1.2rem] border-b-2'><p className=" ">Hi, <a className=" font-[300] underline cursor-pointer" >Sign-in or register</a></p></li>
             {
-              categoryAll && categoryAll.map((item, i) => <li key={i} onClick={() => { setDataSubcategory(item.Subcategory), setOpenSubcategory(!openSubcategory); }} className=' px-[30px] text-[1.2rem] tracking-[.05em] py-[10px] flex items-center justify-between border-b-2'>{item.name}<IoIosArrowForward /></li>)
+              categoryAll && categoryAll.map((item, i) =>
+                <li key={i} onClick={() => { setDataSubcategory(item.Subcategory), setOpenSubcategory(!openSubcategory); }}
+                  className=' px-[30px] text-[1.2rem] tracking-[.05em] py-[10px] flex items-center justify-between border-b-2'
+                >{item.name}
+                  <IoIosArrowForward /></li>)
             }
           </ul>
           <div className={`absolute h-full w-full   duration-300 font-[300] z-50 top-0 bg-white ${openSubcategory ? 'translate-x-full' : "-translate-x-0"}`} >
             <ul >
               <li onClick={() => { setOpenSubcategory(!openSubcategory) }} className='px-[30px] py-[15px] text-[20px]'><FaArrowLeft /></li>
+              <li className=' px-[30px] text-[1.2rem] tracking-[.05em] py-[10px] border-b-2'>View all</li>
               {
-                DataSubcategory && DataSubcategory.map((item, i) => <li key={i} className=' px-[30px] text-[1.2rem] tracking-[.05em] py-[10px] border-b-2'>{item.name}</li>)
+                DataSubcategory && DataSubcategory.map((item, i) => <Link to={`/product/${item.id}`} ><li key={i} className=' px-[30px] text-[1.2rem] tracking-[.05em] py-[10px] border-b-2'>{item.name}</li></Link>)
               }
             </ul>
           </div>

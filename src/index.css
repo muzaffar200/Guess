@@ -46,6 +46,9 @@
   .price{
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   }
+  body{
+    /* overflow: hidden; */
+  }
   @media only screen and (max-width: 1024px){
     .cardProduct{
       flex: 0 1 calc(100% / 3 - 16px);
@@ -72,5 +75,7 @@
 .inp-price::-webkit-outer-spin-button {
   display: none;
 }
+body{
+  position: relative;
+}
 
-  

@@ -6,7 +6,6 @@ function DataContext({ children }) {
     const [AllBags, SetAllBags] = useState(null)
     const [AllShirt, SetAllShirt] = useState(null)
     const [SubCat, SetSubCat] = useState(null)
-    const [wishlistDATA, setwishlistDATA] = useState([])
 
     useEffect(() => {
         getAllCategory().then(res => SetCategoryAll(res))
@@ -14,18 +13,27 @@ function DataContext({ children }) {
         getAllShirt().then(res => SetAllShirt(res))
     }, [])
 
+    const [wishlistDATA, setwishlistDATA] = useState([])
     function addToWishlist(obj) {
+        let test2 = ''
         const test = wishlistDATA.find((item, i) => item.id == obj.id)
         if (test) {
-            setwishlistDATA(wishlistDATA.filter((item, i) => item.id != obj.id))
+            test2 = wishlistDATA.filter((item, i) => item.id != obj.id)
         }
-        else{
-            setwishlistDATA([...wishlistDATA,obj])
+        else {
+            test2 = [...wishlistDATA, obj]
         }
-        console.log(wishlistDATA);
-        
+
+        localStorage.setItem('wishlist', JSON.stringify(test2))
+
+        setwishlistDATA(test2)
     }
-    
+    useEffect(() => {
+        const test = localStorage.getItem('wishlist')
+        if (test) {
+            setwishlistDATA(JSON.parse(test))
+        }
+    }, [])
     return (
         <DATA.Provider value={{
             categoryAll,
@@ -33,7 +41,9 @@ function DataContext({ children }) {
             AllShirt,
             SubCat,
             addToWishlist,
-            wishlistDATA
+            wishlistDATA,
+            setwishlistDATA
+
         }}>
             {children}
         </DATA.Provider>

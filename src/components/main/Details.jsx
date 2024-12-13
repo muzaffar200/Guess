@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getProductId } from '../../service/api'
 import { TfiLocationPin } from "react-icons/tfi";
@@ -10,7 +10,10 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import 'swiper/css/free-mode';
+import { DATA } from '../../context/DataContext';
 function Details() {
+    const { addToWishlist,wishlistDATA } = useContext(DATA)
+
     const [singleProduct, SetsingleProduct] = useState(null)
     const { productId } = useParams()
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
@@ -35,7 +38,7 @@ function Details() {
                             }
                         </div>
 
-                        <div  className='w-[50%]  flex-wrap gap-[10px] hidden max-1024:flex  max-768:w-full'>
+                        <div className='w-[50%]  flex-wrap gap-[10px] hidden max-1024:flex  max-768:w-full'>
                             <Swiper
                                 style={{
                                     '--swiper-navigation-color': '#fff',
@@ -120,7 +123,6 @@ function Details() {
                                             singleProduct ? singleProduct.Size.map((item, i) => {
                                                 return (
                                                     <option value="">{item}</option>
-
                                                 )
                                             }) : ''
                                         }
@@ -147,8 +149,14 @@ function Details() {
                             <p className='text-[16px]'>4 interest-free payments of $18.90 with <span className='font-bold'>Klarna</span>.</p>
 
                             <div className='text-[18px] pt-[10px]'>
-                                <div className='flex items-center  cursor-pointer '>
-                                    <svg className="heart-icon" width="19" height="19" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <div onClick={() => {
+                                        addToWishlist(singleProduct)
+                                    }} className='flex items-center  cursor-pointer '>
+                                    <svg 
+                                        style={{
+                                            fill: wishlistDATA.find((j) => j.id === singleProduct.id) ? '#808284' : 'none'
+                                        }}
+                                        className="heart-icon" width="19" height="19" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                                     </svg>
                                     <span className='underline ml-[7px]'>Add to favorites</span>
