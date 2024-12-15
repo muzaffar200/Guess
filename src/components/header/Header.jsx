@@ -7,9 +7,8 @@ import { IoBagHandleOutline } from "react-icons/io5";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import { FaArrowLeft } from "react-icons/fa";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getProductSearch } from '../../service/api';
-import { RiH1 } from 'react-icons/ri';
 
 function Header() {
   const [categoryStyle, SetCategoryStyle] = useState(false)
@@ -17,9 +16,9 @@ function Header() {
   const [DataSubcategory, setDataSubcategory] = useState(null);
   const [openSubcategory, setOpenSubcategory] = useState(true)
   const [ToggleSearch, setToggleSearch] = useState(false)
-  const [searchValue, setsearchValue] = useState('')
+  const [searchValue, setsearchValue] = useState(false)
   const [SearchData, SetSearchData] = useState([])
-
+const navigate=useNavigate()
   useEffect(() => {
     if (searchValue.length > 1) {
       getProductSearch(searchValue)
@@ -37,7 +36,7 @@ function Header() {
             </Link>
             <ul className='flex max-1024:hidden'>
               {
-                categoryAll ? categoryAll.map((item, i) => <li key={i} className='group text-[.875rem] border-b border-b-transparent hover:border-b-[#000] tracking-[.2em] py-[18px]   mx-3 cursor-pointer '>{item.name}
+                categoryAll ? categoryAll.map((item, i) => <li key={i} className='group text-[.875rem] border-b border-b-transparent hover:border-b-[#000] tracking-[.2em] py-[18px]   px-3 cursor-pointer '>{item.name}
                   <div className='absolute w-full top-[57px] left-0 group-hover:block hidden z-50 p-[30px] bg-[#fff] '>
                     <div className='flex'>
                       <ul className='!px-[80px]'>
@@ -65,17 +64,18 @@ function Header() {
                     onChange={(e) => { setsearchValue(e.target.value) }}
                     placeholder='Search'
                     type="text"
-                    className='py-[5px] px-[10px] outline-none w-full border-black  bg-[#fff] ' />
+                    className='py-[5px] text-[18px] px-[10px] outline-none w-full border-black  bg-[#fff] ' />
                   <MdClose onClick={() => { setToggleSearch(!ToggleSearch) }}
                     className='text-[20px] text-[#979797] cursor-pointer' />
                 </div>
 
-                <div className='absolute overflow-y-scroll overflow-x-hidden  p-[10px] z-[500] bg-white  max-h-[300px] w-full  '>
+                <div style={{display:searchValue==false?'none':'block'}}
+                className='absolute overflow-y-scroll overflow-x-hidden  p-[10px] z-[500] bg-white  max-h-[300px] w-full  '>
 
                   {
                     SearchData.length > 0 &&searchValue.length>1 ? (
                       SearchData.map((item, i) => (
-                        <div key={i} className="flex items-center mb-[15px]">
+                        <div  onClick={()=>{navigate(`/product/detalis/${item.id}`),setToggleSearch(!ToggleSearch)}} key={i} className="flex cursor-pointer items-center mb-[15px]">
                           <img
                             className="w-16"
                             src={item.images[0]}
@@ -97,7 +97,7 @@ function Header() {
                         </div>
                       ))
                     ) : (
-                      <h1>Məhsul yoxdur</h1>
+                      <h1 className='text-[18px] text-center'>The product you are looking for was not found</h1>
                     )
                   }
 
