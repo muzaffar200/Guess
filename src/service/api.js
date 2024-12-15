@@ -25,11 +25,17 @@ async function getProductId(id) {
     const res = await axios.get(`${BaseUrl}products/get/${id}`)
     return res.data
 }
+async function getProductSearch(value) {
+    const res = await axios.get(`${BaseUrl}products/search?q=${value}`)
+    return res.data
+}
 export {
+    getProductSearch,
     getAllCategory,
     getAllBags,
     getAllShirt,
     getSubCategory,
     getCategory,
-    getProductId
+    getProductId,
+    
 }

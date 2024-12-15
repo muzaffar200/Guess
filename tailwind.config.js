@@ -13,10 +13,7 @@ export default {
         'max-877': { 'max': '877px' } ,
         'max-768': { 'max': '768px' } ,
         'max-447': { 'max': '447px' } ,
-
         'max-386': { 'max': '386px' } ,
-
-
       },
     },
     safelist: [

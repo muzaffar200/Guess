@@ -13,7 +13,6 @@ import 'swiper/css/free-mode';
 import { DATA } from '../../context/DataContext';
 function Details() {
     const { addToWishlist,wishlistDATA } = useContext(DATA)
-
     const [singleProduct, SetsingleProduct] = useState(null)
     const { productId } = useParams()
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
