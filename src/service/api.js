@@ -37,5 +37,4 @@ export {
     getSubCategory,
     getCategory,
     getProductId,
-    
 }

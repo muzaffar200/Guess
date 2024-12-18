@@ -18,7 +18,7 @@ function Header() {
   const [ToggleSearch, setToggleSearch] = useState(false)
   const [searchValue, setsearchValue] = useState(false)
   const [SearchData, SetSearchData] = useState([])
-const navigate=useNavigate()
+  const navigate = useNavigate()
   useEffect(() => {
     if (searchValue.length > 1) {
       getProductSearch(searchValue)
@@ -69,13 +69,13 @@ const navigate=useNavigate()
                     className='text-[20px] text-[#979797] cursor-pointer' />
                 </div>
 
-                <div style={{display:searchValue==false?'none':'block'}}
-                className='absolute overflow-y-scroll overflow-x-hidden  p-[10px] z-[500] bg-white  max-h-[300px] w-full  '>
+                <div style={{ display: searchValue == false ? 'none' : 'block' }}
+                  className='absolute overflow-y-scroll overflow-x-hidden  p-[10px] z-[500] bg-white  max-h-[300px] w-full  '>
 
                   {
-                    SearchData.length > 0 &&searchValue.length>1 ? (
+                    SearchData.length > 0 && searchValue.length > 1 ? (
                       SearchData.map((item, i) => (
-                        <div  onClick={()=>{navigate(`/product/detalis/${item.id}`),setToggleSearch(!ToggleSearch)}} key={i} className="flex cursor-pointer items-center mb-[15px]">
+                        <div onClick={() => { navigate(`/product/detalis/${item.id}`), setToggleSearch(!ToggleSearch) }} key={i} className="flex cursor-pointer items-center mb-[15px]">
                           <img
                             className="w-16"
                             src={item.images[0]}
@@ -90,7 +90,7 @@ const navigate=useNavigate()
                             <div className="flex pl-3 gap-2 mt-2 items-center">
                               <p>Colors:</p>
                               {
-                                item.Colors.map((c,i)=><div key={i} className="rounded-[50%] w-4 h-4 " style={{backgroundColor:c}}></div>)
+                                item.Colors.map((c, i) => <div key={i} className="rounded-[50%] w-4 h-4 " style={{ backgroundColor: c }}></div>)
                               }
                             </div>
                           </div>

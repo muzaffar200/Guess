@@ -17,7 +17,7 @@ function ProductCat() {
     const [CardLayout, SetCardLayout] = useState(4)
     const [searchParams, setSearchParams] = useSearchParams();
     const { toggleFilter, OpenFilter } = useContext(FilterData)
-    const { addToWishlist,wishlistDATA } = useContext(DATA)
+    const { addToWishlist, wishlistDATA } = useContext(DATA)
 
 
     const Page = searchParams.get('page') || 1;
@@ -33,6 +33,8 @@ function ProductCat() {
     useEffect(() => {
         subId ? getSubCategory(subId, limit, Page, size, color, discount, minPrice, maxPrice).then(res => SetSubidData(res)) :
             getCategory(catId, limit, Page, size, color, discount, minPrice, maxPrice).then(res => SetSubidData(res))
+        console.log(SubidData);
+
 
     }, [catId, subId, limit, Page, size, color, minPrice, maxPrice])
 
@@ -244,7 +246,7 @@ function ProductCat() {
 
                 <div className='flex flex-wrap !gap-[16px] w-[80%]  m-0 p-0 max-1024:w-full' >
                     {
-                        SubidData?.data?.length > 0 ? SubidData.data.map((item, i) => {
+                        Array.isArray(SubidData?.data) && SubidData.data.length > 0 ? SubidData.data.map((item, i) => {
                             return (
                                 <Link to={`/product/detalis/${item.id}`} key={i} className={`  border-box m-0 p-0 cardProduct !max-1024:flex-[0_1_calc((100%/4)-16px)]`} style={{ width: `calc((100% / ${CardLayout}) - 16px)`, transition: 'width 0.5s ease-in-out' }}>
                                     <div className='group relative'>
@@ -255,14 +257,15 @@ function ProductCat() {
                                     <div className='allFont h-[120px]'>
                                         <div className='flex  justify-between pr-[10px]  items-center py-[7px]'>
                                             <p className=' !text-[15px] max-386:text-[12px] tracking-[.5px] '>{item.name} </p>
-                                            <svg 
-                                            onClick={(event) => {
-                                                event.preventDefault()
-                                                addToWishlist(item)
-                                            }} 
-                                            style={{fill: wishlistDATA.find((j) => j.id === item.id) ? '#808284' : 'none'
-                                            }}
-                                            className="heart-icon" width="19" height="19" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+                                            <svg
+                                                onClick={(event) => {
+                                                    event.preventDefault()
+                                                    addToWishlist(item)
+                                                }}
+                                                style={{
+                                                    fill: wishlistDATA.find((j) => j.id === item.id) ? '#808284' : 'none'
+                                                }}
+                                                className="heart-icon" width="19" height="19" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
                                             >
                                                 <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                                             </svg>
@@ -278,8 +281,23 @@ function ProductCat() {
                         }) : (
                             <div className="  h-[80vh] w-full flex items-center justify-center" >
                                 <div>
-                                    <HiOutlineInboxStack className='text-[35px] m-auto text-[#8a8a8b]' />
-                                    <p className="text-[20px]">No data available</p>
+                                    {
+                                        SubidData == null ?
+                                            <div>
+                                                <div className="flex items-center justify-center space-x-2">
+                                                    <div className="w-8 h-8 rounded-full animate-pulse bg-pink-500"></div>
+                                                    <div className="w-8 h-8 rounded-full animate-pulse bg-pink-500"></div>
+                                                    <div className="w-8 h-8 rounded-full animate-pulse bg-pink-500"></div>
+                                                </div>
+
+
+                                            </div>
+                                            :
+                                            <>
+                                                <HiOutlineInboxStack className='text-[35px] m-auto text-[#8a8a8b]' />
+                                                <p className="text-[20px]">No data available</p>
+                                            </>
+                                    }
                                 </div>
                             </div>
                         )
