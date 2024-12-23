@@ -7,6 +7,7 @@ import { FilterData } from '../../context/FilterContext';
 import { HiOutlineInboxStack } from "react-icons/hi2";
 import { IoMdClose } from "react-icons/io";
 import { DATA } from '../../context/DataContext';
+import { Basket } from '../../context/BasketContext';
 
 
 function ProductCat() {
@@ -18,7 +19,9 @@ function ProductCat() {
     const [searchParams, setSearchParams] = useSearchParams();
     const { toggleFilter, OpenFilter } = useContext(FilterData)
     const { addToWishlist, wishlistDATA } = useContext(DATA)
-
+    const { addToBasket } = useContext(Basket)
+    const [togglePopup, SetTogglePopup] = useState([])
+    const [selectedColor, setSelectedColor] = useState({})
 
     const Page = searchParams.get('page') || 1;
     const limit = searchParams.get('limit') || 10;
@@ -98,10 +101,25 @@ function ProductCat() {
         }
         else {
             setSearchParams({ ...params, 'minPrice': min, 'maxPrice': max, 'page': 1 })
-
         }
     }
+    function cardPopup(id) {
+        const test = togglePopup.includes(id)
+        if (test) {
+            SetTogglePopup(togglePopup.filter((item) => item !== id))
+        }
+        else {
+            SetTogglePopup([...togglePopup, id])
+        }
+    }
+    function handlePopup(id, colors) {
+        cardPopup(id)
+        setSelectedColor({ ...selectedColor, [id]: colors[0] })
+    }
+    function handleColorChange(color, id) {
+        setSelectedColor({ ...selectedColor, [id]: color })
 
+    }
     return (
         <main className='w-[95%] m-auto'>
             <div className=' flex justify-end'>
@@ -138,7 +156,7 @@ function ProductCat() {
                         </div>
                         <div className=''>
                             <p onClick={() => { SetFeatured(!Featured) }} className=' cursor-pointer flex items-center underline max-1024:hidden '>Featured <IoIosArrowDown className='ml-[5px]' /></p>
-                            <div className={`bg-white border px-[10px] absolute top-[23px] w-full left-0   ${Featured ? 'block' : 'hidden'}`} >
+                            <div className={`bg-white border px-[10px]  z-40 absolute top-[23px] w-full left-0   ${Featured ? 'block' : 'hidden'}`} >
                                 <p className='py-[5px]'>Price: low to high</p>
                                 <p className='py-[5px]'>Price: high to low</p>
                             </div>
@@ -252,10 +270,47 @@ function ProductCat() {
                                     <div className='group relative'>
                                         <img className='' src={item.images[0]} alt="" />
                                         <img className=' absolute top-0 left-0 hidden group-hover:inline' src={item.images[1]} alt="" />
-                                        <button className='absolute  text-[13px] right-[10px] bottom-[10px] border bg-white px-[14px] py-[5px] rounded-[5px]'>Add</button>
+                                        <button
+                                            onClick={(e) => { e.preventDefault(), handlePopup(item.id, item.Colors) }}
+                                            className='absolute  text-[13px] right-[10px] bottom-[10px] border bg-white px-[11px] py-[4px] rounded-[5px]'
+                                        >Add{togglePopup.includes(item.id) ? '-' : '+'}</button>
+                                        <div
+                                            style={{ display: togglePopup.includes(item.id) ? '' : 'none' }}
+                                            className='w-[95%] p-[10px] rounded-[.3125rem] popupShadow  z-50 bg-[#f9f9f9]  absolute bottom-[-60wh] left-[50%] right-[50%] translate-x-[-50%]'>
+                                            <p className='text-[16px] pt-[16px] pb-[8px]'>Select a color: </p>
+                                            <div className='flex gap-[5px] cursor-pointer flex-wrap'>
+                                                {
+                                                    item.Colors.map((c, i) => {
+                                                        return (
+                                                            <>
+                                                                <div key={i}
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault()
+                                                                        handleColorChange(c, item.id)
+                                                                    }}
+                                                                    className=' w-[30px] h-[30px] rounded-[50%] border border-[#bdbec0] relative'
+                                                                    style={{ borderColor: c == selectedColor[item.id] ? 'black' : '' }}
+                                                                >
+                                                                    <div className=' w-[25px] h-[25px]  rounded-[50%] absolute  top-[50%] left-[50%]  transform -translate-x-1/2 -translate-y-1/2 translate-[50%]'
+                                                                        style={{ backgroundColor: c }}
+                                                                    >
+                                                                    </div>
+                                                                </div>
+                                                            </>
+                                                        )
+                                                    })
+                                                }
+                                            </div>
+                                            <p className='py-[10px]'>Select a size:</p>
+                                            <div className='flex gap-[15px] text-[16px] underline'>
+                                                {
+                                                    item.Size.map((j, i) => <div onClick={(e)=>{e.preventDefault(),addToBasket(item.id,item.name,item.price,item.discount,selectedColor[item.id],j,item.images[0]),cardPopup(item.id)}}>{j}</div>)
+                                                }
+                                            </div>
+                                        </div>
                                     </div>
                                     <div className='allFont h-[120px]'>
-                                        <div className='flex  justify-between pr-[10px]  items-center py-[7px]'>
+                                        <div className='flex  justify-between   items-center py-[7px]'>
                                             <p className=' !text-[15px] max-386:text-[12px] tracking-[.5px] '>{item.name} </p>
                                             <svg
                                                 onClick={(event) => {

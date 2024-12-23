@@ -29,7 +29,7 @@ function Header() {
   return (
     <>
       <header className=' relative  border max-1024:border-0'>
-        <div className='w-[95%] mx-auto  flex justify-between items-center '>
+        <div className='w-[95%] mx-auto   flex justify-between items-center '>
           <div className='flex items-center'>
             <Link to={'/'}>
               <img className='w-[111px] h-[20px] mr-[25px] max-1024:my-[13px]' src="/public/assets/img/logo-guess-header.svg" alt="GuessLogo" />
@@ -57,9 +57,8 @@ function Header() {
             <p className=" text-[.81rem] px-[1em]  py-[5px] max-1024:hidden ">Hi, <a className="font-normal underline cursor-pointer" >Sign-in or register</a></p>
             <div className="flex items-center border-l-2 border-l-[#f2f2f2] gap-[15px] max-1024:border-0">
 
-              <div style={{ display: ToggleSearch ? 'block' : 'none' }}
-                className='absolute left-[-300px] w-[435px] max-1024:left-[-430px]'>
-                <div className='flex items-center bg-white border-b'>
+              <div
+                className={`absolute left-[-300px] w-[435px] max-1024:left-[-430px] ${ToggleSearch ? '' : 'hidden'} max-768:hidden`}>                <div className='flex items-center bg-white border-b'>
                   <input
                     onChange={(e) => { setsearchValue(e.target.value) }}
                     placeholder='Search'
@@ -71,7 +70,6 @@ function Header() {
 
                 <div style={{ display: searchValue == false ? 'none' : 'block' }}
                   className='absolute overflow-y-scroll overflow-x-hidden  p-[10px] z-[500] bg-white  max-h-[300px] w-full  '>
-
                   {
                     SearchData.length > 0 && searchValue.length > 1 ? (
                       SearchData.map((item, i) => (
@@ -110,8 +108,8 @@ function Header() {
                 <Link to={'/wishlist'}><IoMdHeartEmpty className="text-[24px] max-1024:text-[29px]" /></Link>
                 <span className="absolute right-[-9px] top-[3px] max-1024:top-[6px] text-xs ">{wishlistDATA.length ? wishlistDATA.length : ''}</span>
               </div>
-              <IoBagHandleOutline className="text-[24px] max-1024:text-[29px]" />
-
+              <Link to={'/cart'}><IoBagHandleOutline className="text-[24px] max-1024:text-[29px]" />
+              </Link>
               {categoryStyle === false && (
                 <HiMiniBars3
                   onClick={() => SetCategoryStyle(true)}
@@ -152,6 +150,56 @@ function Header() {
           </div>
         </div>
       </header>
+
+      <div
+        className={`${ToggleSearch ? '' : '!hidden'} hidden max-768:block`}>
+        <div className='w-[95%] mx-auto '>
+          <div className='flex items-center bg-white border-b'>
+            <input
+              onChange={(e) => { setsearchValue(e.target.value) }}
+              placeholder='Search'
+              type="text"
+              className='py-[5px] text-[18px] px-[10px] outline-none w-full border-black  bg-[#fff] ' />
+            <MdClose onClick={() => { setToggleSearch(!ToggleSearch) }}
+              className='text-[20px] text-[#979797] cursor-pointer' />
+          </div>
+        </div>
+
+        <div style={{ display: searchValue == false ? 'none' : 'block' }}
+          className='absolute overflow-y-scroll overflow-x-hidden  p-[15px] z-[500] bg-white  max-h-[300px] w-full  '>
+          {
+            SearchData.length > 0 && searchValue.length > 1 ? (
+              SearchData.map((item, i) => (
+                <div onClick={() => { navigate(`/product/detalis/${item.id}`), setToggleSearch(!ToggleSearch) }} key={i} className="flex cursor-pointer items-center mb-[15px]">
+                  <img
+                    className="w-16"
+                    src={item.images[0]}
+                    alt=""
+                  />
+                  <div>
+                    <p className="text-sm pl-3 my-1">{item.name}</p>
+                    <div className="flex pl-[10px] items-center gap-1">
+                      <p className="text-sm line-through ">139.95</p>
+                      <p className="text-red-600">128.55</p>
+                    </div>
+                    <div className="flex pl-3 gap-2 mt-2 items-center">
+                      <p>Colors:</p>
+                      {
+                        item.Colors.map((c, i) => <div key={i} className="rounded-[50%] w-4 h-4 " style={{ backgroundColor: c }}></div>)
+                      }
+                    </div>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <h1 className='text-[18px] text-center'>The product you are looking for was not found</h1>
+            )
+          }
+
+
+
+        </div>
+      </div>
     </>
   )
 }
