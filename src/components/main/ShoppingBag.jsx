@@ -71,7 +71,7 @@ function ShoppingBag() {
                                                             <span>Item total:<span className='text-[14px] ml-[3px]'>${((item.price - ((item.price * item.discount) / 100))*item.quantity).toFixed(2)}</span></span>
                                                         </div>
                                                     </div>
-                                                    <IoMdClose onClick={() => { BasketRemove(item.id) }} className='absolute top-[25px] right-[2px] cursor-pointer' />
+                                                    <IoMdClose onClick={() => { BasketRemove(item.id,item.color,item.size) }} className='absolute top-[25px] right-[2px] cursor-pointer' />
 
                                                 </div>
                                             )
@@ -122,7 +122,7 @@ function ShoppingBag() {
                                     </div>
                                     <div className='text-[17px] tracking-[.5px] font-bold flex items-center justify-between border-t border-black  py-[10px]'>
                                         <p>Estimated total</p>
-                                        <span>${totalPrice() > 150 ? totalPrice() - ((totalPrice() * 15) / 100).toFixed(2) : totalPrice()}</span>
+                                        <span>${totalPrice() > 150 ? (totalPrice() - ((totalPrice() * 15) / 100)).toFixed(2) : totalPrice()}</span>
                                     </div>
                                 </div>
                                 <p className='flex items-center  py-[15px]'> <FaLock className='mr-[5px]' /><span>We care about your security</span></p>

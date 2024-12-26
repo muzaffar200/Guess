@@ -77,7 +77,7 @@ const Footer = () => {
   const [flag, setFlag] = useState(null)
 
   return (
-    <footer className="bg-gray-100 py-12 relative z-40 mt-[100px]">
+    <footer className="bg-gray-100 py-12  z-40 mt-[100px]">
       <div className="mx-auto w-[95%]  base:flex justify-between">
         {footer.map((item, index) => {
 

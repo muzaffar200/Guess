@@ -3,12 +3,14 @@ import { DATA } from '../../context/DataContext'
 import { Link } from 'react-router-dom'
 import { IoMdClose } from "react-icons/io"
 import PopupWishlist from './PopupWishlist'
+import { Basket } from '../../context/BasketContext'
 
 function Wishlist() {
     const { addToWishlist, wishlistDATA, setwishlistDATA } = useContext(DATA)
     const [selectedItem, setSelectedItem] = useState(null)
     const [PopupVisible, setPopupVisible] = useState(false)
-   
+    const { addToBasket } = useContext(Basket)
+
     function handleEdit(item) {
         setSelectedItem(item)
         setPopupVisible(true)
@@ -49,7 +51,7 @@ function Wishlist() {
                                                                 'Select size' : 'Size:' + item.Size}
                                                         </span>
 
-                                                        <span className='text-[14px]'>Qty: <span className='ml-[3px]'>1</span></span>
+                                                        <span className='text-[14px]'>Qty:<span className='ml-[3px]'>1</span></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -63,7 +65,9 @@ function Wishlist() {
                                             >Select a size</div>
 
                                         </div>
-                                        <div className='w-[328px] pt-[30px] max-1024:p-0 max-1024:w-full max-1024:px-[15px] max-1024:pb-[35px]'
+                                        <div
+                                            onClick={() => { addToBasket(item.id, item.name, item.price, item.discount, item.Colors, item.Size, item.images[0]),addToWishlist(item) }}
+                                            className='w-[328px] pt-[30px] max-1024:p-0 max-1024:w-full max-1024:px-[15px] max-1024:pb-[35px]'
                                             style={{ display: Array.isArray(item.Size) ? 'none' : 'block' }}
                                         >
                                             <div

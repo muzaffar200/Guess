@@ -4,11 +4,20 @@ export const Basket = createContext([])
 
 function BasketContext({ children }) {
     const [DATAbasket, setDATAbasket] = useState([])
-    function addToBasket(id, name, price, discount, color, size, img) {
+    function addToBasket(id, name, price, discount, color, size, img, Qty) {
+        console.log(Qty);
+
         const index = DATAbasket.findIndex((item) => item.id == id && item.color == color && item.size == size)
         let updatedBasket = [...DATAbasket]
         if (index != -1) {
-            updatedBasket[index].quantity =+updatedBasket[index].quantity+1
+            if (Qty) {
+                updatedBasket[index].quantity = +updatedBasket[index].quantity + +Qty
+
+            }
+            else {
+                updatedBasket[index].quantity = +updatedBasket[index].quantity + 1
+
+            }
         }
         else {
             updatedBasket = [...DATAbasket,
@@ -20,7 +29,7 @@ function BasketContext({ children }) {
                 discount,
                 color,
                 size,
-                'quantity': 1
+                'quantity': Qty || 1
             }
             ]
 
@@ -28,13 +37,13 @@ function BasketContext({ children }) {
 
         setDATAbasket(updatedBasket);
         localStorage.setItem('basket', JSON.stringify(updatedBasket))
-
     }
-    function BasketRemove(id) {
+    function BasketRemove(id, color, size) {
         let updatedBasket = [...DATAbasket]
-        updatedBasket = updatedBasket.filter((item,i) =>  item.id != id )
+        updatedBasket = updatedBasket.filter((item, i) => item.id != id || item.color != color || item.size != size)
         setDATAbasket(updatedBasket);
         localStorage.setItem('basket', JSON.stringify(updatedBasket))
+        
     }
     useEffect(() => {
         const test = localStorage.getItem('basket')

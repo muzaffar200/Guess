@@ -11,16 +11,27 @@ import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
 import 'swiper/css/free-mode';
 import { DATA } from '../../context/DataContext';
+import { Basket } from '../../context/BasketContext';
 function Details() {
-    const { addToWishlist,wishlistDATA } = useContext(DATA)
+    const { addToWishlist, wishlistDATA } = useContext(DATA)
     const [singleProduct, SetsingleProduct] = useState(null)
     const { productId } = useParams()
-    const [thumbsSwiper, setThumbsSwiper] = useState(null);
+    const [thumbsSwiper, setThumbsSwiper] = useState(null)
+    const [size, SetSize] = useState(null)
+    const [Color, SetColor] = useState(null)
+    const [Qty, SetQty] = useState(1)
+    const { addToBasket } = useContext(Basket)
+
+
 
     useEffect(() => {
-        productId ? getProductId(productId).then(res => SetsingleProduct(res)) : ''
+        if (productId) {
+            getProductId(productId).then(res => SetsingleProduct(res))
+            if (!Color) SetColor(singleProduct?.Colors[0])
+            if (!size) SetSize(singleProduct?.Size[0])
+        }
+    }, [productId, singleProduct])
 
-    }, [productId])
     return (
         <main className='w-[95%] m-auto pt-[60px]'>
             {
@@ -100,7 +111,9 @@ function Details() {
                                     {
                                         singleProduct.Colors.map((item, i) => {
                                             return (
-                                                <div className=' w-[35px] h-[35px] rounded-[50%] border border-[#bdbec0] relative'>
+                                                <div onClick={() => { SetColor(item) }}
+                                                    style={{ borderColor: Color == item ? 'black' : '' }}
+                                                    className=' w-[35px] h-[35px] rounded-[50%] border border-[#bdbec0] relative'>
                                                     <div className=' w-[30px] h-[30px] bg-[red]  rounded-[50%] absolute  top-[50%] left-[50%]  transform -translate-x-1/2 -translate-y-1/2 translate-[50%]'
                                                         style={{ backgroundColor: item }}
                                                     >
@@ -117,11 +130,11 @@ function Details() {
                             <div className='text-[18px] py-[15px]'>
                                 <div className='border-b   border-black py-[8px] flex items-center mb-[9px]'>
                                     <span className=''>Size:</span>
-                                    <select className='w-full outline-none ml-[6px]'>
+                                    <select onChange={(e) => { SetSize(e.target.value) }} className='w-full outline-none ml-[6px]'>
                                         {
                                             singleProduct ? singleProduct.Size.map((item, i) => {
                                                 return (
-                                                    <option value="">{item}</option>
+                                                    <option value={item}>{item}</option>
                                                 )
                                             }) : ''
                                         }
@@ -130,12 +143,12 @@ function Details() {
                                 </div>
                                 <div className='border-b text-[18px]  border-black py-[8px] flex items-center'>
                                     <span className=''>Qty:</span>
-                                    <select className='w-full text-[15px] outline-none ml-[6px]' name="" id="">
+                                    <select onChange={(e) => { SetQty(e.target.value)}} className='w-full text-[15px] outline-none ml-[6px]' name="" id="">
 
                                         {
                                             Array(10).fill('').map((_, i) => {
                                                 return (
-                                                    <option value="">{i + 1}</option>
+                                                    <option value={i+1}>{i + 1}</option>
                                                 )
                                             })
                                         }
@@ -144,14 +157,16 @@ function Details() {
                                 </div>
 
                             </div>
-                            <div className='flex justify-center items-center my-[20px]  h-[44px]  rounded-[22px]  bg-black  border-black border-[2px] text-[#fff] hover:bg-transparent hover:text-[#000] cursor-pointer'>Add to bag</div>
+                         <div onClick={() => { addToBasket(singleProduct.id, singleProduct.name, singleProduct.price, singleProduct.discount, Color, size, singleProduct.images[0], Qty) }}
+    className='flex justify-center items-center my-[20px]  h-[44px]  rounded-[22px]  bg-black  border-black border-[2px] text-[#fff] hover:bg-transparent hover:text-[#000] cursor-pointer'>Add to bag</div>
+
                             <p className='text-[16px]'>4 interest-free payments of $18.90 with <span className='font-bold'>Klarna</span>.</p>
 
                             <div className='text-[18px] pt-[10px]'>
                                 <div onClick={() => {
-                                        addToWishlist(singleProduct)
-                                    }} className='flex items-center  cursor-pointer '>
-                                    <svg 
+                                    addToWishlist(singleProduct)
+                                }} className='flex items-center  cursor-pointer '>
+                                    <svg
                                         style={{
                                             fill: wishlistDATA.find((j) => j.id === singleProduct.id) ? '#808284' : 'none'
                                         }}

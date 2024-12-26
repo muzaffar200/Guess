@@ -43,7 +43,7 @@ function PopupWishlist({ item, onClose,updatedWishlist }) {
                     <IoMdClose onClick={onClose} className='absolute top-[8px] right-[8px] cursor-pointer' />
                 </div>
             </div>
-            <div className='fixed top-0 bg-[black] opacity-[.5] w-full h-full'>
+            <div className='fixed top-0 bg-[black] opacity-[.5] w-full h-[200vh] z-100'>
             </div>
         </div>
     )
