@@ -9,6 +9,7 @@ import { IoIosArrowForward } from "react-icons/io";
 import { FaArrowLeft } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom';
 import { getProductSearch } from '../../service/api';
+import { Basket } from '../../context/BasketContext';
 
 function Header() {
   const [categoryStyle, SetCategoryStyle] = useState(false)
@@ -18,7 +19,9 @@ function Header() {
   const [ToggleSearch, setToggleSearch] = useState(false)
   const [searchValue, setsearchValue] = useState(false)
   const [SearchData, SetSearchData] = useState([])
+  const {DATAbasket}=useContext(Basket)
   const navigate = useNavigate()
+
   useEffect(() => {
     if (searchValue.length > 1) {
       getProductSearch(searchValue)
@@ -108,8 +111,11 @@ function Header() {
                 <Link to={'/wishlist'}><IoMdHeartEmpty className="text-[24px] max-1024:text-[29px]" /></Link>
                 <span className="absolute right-[-9px] top-[3px] max-1024:top-[6px] text-xs ">{wishlistDATA.length ? wishlistDATA.length : ''}</span>
               </div>
-              <Link to={'/cart'}><IoBagHandleOutline className="text-[24px] max-1024:text-[29px]" />
-              </Link>
+              <div  className="relative mr-[5px]">
+              <Link to={'/cart'}><IoBagHandleOutline className="text-[24px] max-1024:text-[29px]" /> </Link>
+              <span className="absolute right-[-9px] top-[3px] max-1024:top-[6px] text-xs ">{DATAbasket.length ? DATAbasket.length : ''}</span>
+
+              </div>
               {categoryStyle === false && (
                 <HiMiniBars3
                   onClick={() => SetCategoryStyle(true)}

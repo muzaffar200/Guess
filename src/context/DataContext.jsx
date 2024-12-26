@@ -14,6 +14,7 @@ function DataContext({ children }) {
     }, [])
 
     const [wishlistDATA, setwishlistDATA] = useState([])
+
     function addToWishlist(obj) {
         let test2 = ''
         const test = wishlistDATA.find((item, i) => item.id == obj.id)
@@ -28,12 +29,14 @@ function DataContext({ children }) {
 
         setwishlistDATA(test2)
     }
+
     useEffect(() => {
         const test = localStorage.getItem('wishlist')
         if (test) {
             setwishlistDATA(JSON.parse(test))
         }
     }, [])
+    
     return (
         <DATA.Provider value={{
             categoryAll,

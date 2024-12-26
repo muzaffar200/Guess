@@ -4,9 +4,19 @@ import { Link } from 'react-router-dom';
 import { IoMdHeartEmpty } from "react-icons/io";
 import { Basket } from '../../context/BasketContext';
 import { IoMdClose } from "react-icons/io"
+import { getProductId } from '../../service/api'
+import { DATA } from '../../context/DataContext';
 
 function ShoppingBag() {
-    const { DATAbasket, BasketRemove,setDATAbasket } = useContext(Basket)
+    const { DATAbasket, BasketRemove, setDATAbasket } = useContext(Basket)
+    const { wishlistDATA } = useContext(DATA)
+    const { addToWishlist } = useContext(DATA)
+
+    function MoveToFavorites(id) {
+        getProductId(id).then(res => addToWishlist(res))
+
+
+    }
 
     function totalPrice() {
         return DATAbasket.reduce((acc, item) => {
@@ -15,14 +25,17 @@ function ShoppingBag() {
         }, 0).toFixed(2)
     }
 
-    function changeQuantity(qty,id) {
-       let updatedBasket=[...DATAbasket]
-       const index= updatedBasket.findIndex((item,i)=>item.id==id)
-       updatedBasket[index].quantity=qty
-       setDATAbasket(updatedBasket)
-       localStorage.setItem('basket', JSON.stringify(updatedBasket))
-    
+    function chekWishlist(id) {
+        return wishlistDATA.find((item, i) => item.id == id)
     }
+    function changeQuantity(qty, id) {
+        let updatedBasket = [...DATAbasket]
+        const index = updatedBasket.findIndex((item, i) => item.id == id)
+        updatedBasket[index].quantity = qty
+        setDATAbasket(updatedBasket)
+        localStorage.setItem('basket', JSON.stringify(updatedBasket))
+    }
+
     return (
         <main>
             <div className='w-[970px] m-auto max-1024:max-w-[375px] max-447:max-w-[95%]'>
@@ -51,7 +64,7 @@ function ShoppingBag() {
                                                                 <span className='underline text-[15px]'>Size: <span>{item.size}</span></span>
 
                                                                 <span className='text-[14px]'>Qty:
-                                                                    <select value={item.quantity} onChange={(e) => { changeQuantity(e.target.value,item.id) }} className='w-[50px]' name="" id="">
+                                                                    <select value={item.quantity} onChange={(e) => { changeQuantity(e.target.value, item.id) }} className='w-[50px]' name="" id="">
                                                                         {
                                                                             Array(10).fill('').map((_, index) => {
                                                                                 return (
@@ -63,15 +76,18 @@ function ShoppingBag() {
                                                                 </span>
                                                             </div>
                                                         </div>
-                                                        <div className='flex items-center text-[15px]  cursor-pointer gap-[7px] my-[10px] mb-[20px]'>
+                                                        <div
+                                                            style={{ display: chekWishlist(item.id) ? 'none' : '' }}
+                                                            onClick={() => { MoveToFavorites(item.id), BasketRemove(item.id, item.color, item.size) }}
+                                                            className='flex items-center text-[15px]  cursor-pointer gap-[7px] mt-[10px] '>
                                                             <IoMdHeartEmpty className='text-[17px]' />
                                                             <span className='underline'>Move to favorites</span>
                                                         </div>
-                                                        <div className='flex justify-end font-bold'>
-                                                            <span>Item total:<span className='text-[14px] ml-[3px]'>${((item.price - ((item.price * item.discount) / 100))*item.quantity).toFixed(2)}</span></span>
+                                                        <div className='flex justify-end font-bold pt-[25px]'>
+                                                            <span>Item total:<span className='text-[14px] ml-[3px]'>${((item.price - ((item.price * item.discount) / 100)) * item.quantity).toFixed(2)}</span></span>
                                                         </div>
                                                     </div>
-                                                    <IoMdClose onClick={() => { BasketRemove(item.id,item.color,item.size) }} className='absolute top-[25px] right-[2px] cursor-pointer' />
+                                                    <IoMdClose onClick={() => { BasketRemove(item.id, item.color, item.size) }} className='absolute top-[25px] right-[2px] cursor-pointer' />
 
                                                 </div>
                                             )
