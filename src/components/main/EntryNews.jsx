@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 function EntryNews() {
   return (
@@ -19,8 +20,8 @@ function EntryNews() {
             <span className='FreightDis uppercase'>Entire Site</span>
           </h1>
           <div className='flex justify-center '>
-            <p className='mr-[35px] max-386:text-[.9rem] max-877:mr-[15px] text-[1rem] tracking-[.20rem] max-1085:tracking-[.05rem]  max-877:tracking-[.015rem]  border-b-2 border-b-[#423639] '>Shop Women's Apparel</p>
-            <p className=' text-[1rem] max-386:text-[.9rem] tracking-[.20rem] border-b-2 max-1085:tracking-[.05rem] max-877:tracking-[.015rem]  border-b-[#423639] '>Shop Handbags</p>
+            <Link to={'/product/1'}  className='mr-[35px] max-386:text-[.9rem] max-877:mr-[15px] text-[1rem] tracking-[.20rem] max-1085:tracking-[.05rem]  max-877:tracking-[.015rem]  border-b-2 border-b-[#423639] '>Shop Women's Apparel</Link>
+            <Link to={'/product/all/4'} className=' text-[1rem] max-386:text-[.9rem] tracking-[.20rem] border-b-2 max-1085:tracking-[.05rem] max-877:tracking-[.015rem]  border-b-[#423639] '>Shop Handbags</Link>
           </div>
         </div>
       </div>

@@ -36,7 +36,6 @@ function ProductCat() {
     useEffect(() => {
         subId ? getSubCategory(subId, limit, Page, size, color, discount, minPrice, maxPrice).then(res => SetSubidData(res)) :
             getCategory(catId, limit, Page, size, color, discount, minPrice, maxPrice).then(res => SetSubidData(res))
-        console.log(SubidData);
 
 
     }, [catId, subId, limit, Page, size, color, minPrice, maxPrice])

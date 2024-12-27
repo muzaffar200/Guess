@@ -5,7 +5,7 @@ import 'swiper/css/navigation';
 function ProductSlider({ Product,title }) {
     return (
         <div className='w-[95%] m-auto mb-[30px]'>
-            <h2 className={`${title?'':'hidden'} text-[3rem] font-[200] text-center  FreightDis italic pt-[90px] pb-[30px]  max-768:text-[2.2rem] max-447:text-[1.9rem]`}>{title}</h2>
+            <h2 className={`${title?'':'hidden'} text-[3rem] font-[200] text-center  FreightDis italic pt-[90px] pb-[30px]  max-768:text-[2.2rem] max-447:text-[1.7rem]  max-877:pt-[50px] `}>{title}</h2>
 
             <Swiper
                 slidesPerView={2.5}

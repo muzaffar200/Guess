@@ -16,10 +16,13 @@ function Wishlist() {
         setPopupVisible(true)
     }
     function updatedWishlist(color, size) {
-        const index = wishlistDATA.findIndex((item, _) => item.id == selectedItem.id)
-        wishlistDATA[index] = { ...wishlistDATA[index], 'Colors': color, 'Size': size }
-        setwishlistDATA(wishlistDATA)
-        localStorage.setItem('wishlist', JSON.stringify(wishlistDATA))
+        if (size) {
+            const index = wishlistDATA.findIndex((item, _) => item.id == selectedItem.id)
+            wishlistDATA[index] = { ...wishlistDATA[index], 'Colors': color, 'Size': size }
+            setwishlistDATA(wishlistDATA)
+            localStorage.setItem('wishlist', JSON.stringify(wishlistDATA))
+            setPopupVisible(false)
+        }
 
     }
 
