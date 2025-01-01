@@ -41,7 +41,9 @@ function ProductCat() {
     }, [catId, subId, limit, Page, size, color, minPrice, maxPrice])
 
 
-
+    useEffect(() => {
+        window.scrollTo(0, 0); // Səhifə yuxarıya sürüşdürülür
+      }, []);
     function changePage(increment) {
         const params = Object.fromEntries(searchParams)
         const newPage = parseInt(Page) + increment;
@@ -265,7 +267,7 @@ function ProductCat() {
                     {
                         Array.isArray(SubidData?.data) && SubidData.data.length > 0 ? SubidData.data.map((item, i) => {
                             return (
-                                <Link to={`/product/detalis/${item.id}`} key={i} className={`  border-box m-0 p-0 cardProduct !max-1024:flex-[0_1_calc((100%/4)-16px)]`} style={{ width: `calc((100% / ${CardLayout}) - 16px)`, transition: 'width 0.5s ease-in-out' }}>
+                                <Link to={`/product/detalis/${item.id}`} key={i} className={` block border-box m-0 p-0 cardProduct !max-1024:flex-[0_1_calc((100%/4)-16px)]`} style={{ width: `calc((100% / ${CardLayout}) - 16px)`, transition: 'width 0.5s ease-in-out' }}>
                                     <div className='group relative'>
                                         <img className='' src={item.images[0]} alt="" />
                                         <img className=' absolute top-0 left-0 hidden group-hover:inline' src={item.images[1]} alt="" />
@@ -308,8 +310,8 @@ function ProductCat() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className='allFont h-[120px]'>
-                                        <div className='flex  justify-between   items-center py-[7px]'>
+                                    <div className='allFont m-[5px]'>
+                                        <div className='flex  justify-between  py-[7px]'>
                                             <p className=' !text-[15px] max-386:text-[12px] tracking-[.5px] '>{item.name} </p>
                                             <svg
                                                 onClick={(event) => {
@@ -319,14 +321,14 @@ function ProductCat() {
                                                 style={{
                                                     fill: wishlistDATA.find((j) => j.id === item.id) ? '#808284' : 'none'
                                                 }}
-                                                className="heart-icon" width="19" height="19" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
+                                                className="heart-icon m-[5px] shrink-0" width="19" height="19" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
                                             >
                                                 <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                                             </svg>
                                         </div>
-                                        <div className='  text-[14px] max-386:text-[10px] tracking-[.5px]'>
-                                            <span className='mr-[5px]' >${item.price}</span>
-                                            <span className='line-through mr-[10px] text-[#71767f]'>${(item.price - ((item.price * item.discount) / 100)).toFixed(2)}</span>
+                                        <div className=' flex flex-wrap text-[14px] max-386:text-[13px] tracking-[.5px]'>
+                                            <span className='mr-[5px]'>${(item.price - ((item.price * item.discount) / 100)).toFixed(2)}</span>
+                                            <span className=' line-through mr-[10px] text-[#71767f] ' >${item.price}</span>
                                             <span className='text-[#71767f]' >({item.discount}% OFF)</span>
                                         </div>
                                     </div>

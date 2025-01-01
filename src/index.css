@@ -68,6 +68,9 @@
     fill: none;
     stroke: #808284;
     stroke-width:1.5 ;
+    width: 19px !important;
+    height: 19px !important;
+    flex-shrink: 0; 
 }
 .inp-price::-webkit-inner-spin-button,
 .inp-price::-webkit-outer-spin-button {
@@ -77,5 +80,15 @@ body{
   position: relative;
 }
 .popupShadow{
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;}
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  z-index: 9999!important;
+}
 
+  .swiper-wrapper {
+    overflow: visible !important; /* Popup-un görünməsi üçün */
+  }
+  
+  .swiper-slide {
+    overflow: visible !important; /* Hər slayd üçün */
+  }
+  

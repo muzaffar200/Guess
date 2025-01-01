@@ -35,7 +35,7 @@ function Header() {
         <div className='w-[95%] mx-auto   flex justify-between items-center '>
           <div className='flex items-center'>
             <Link to={'/'}>
-              <img className='w-[111px] h-[20px] mr-[25px] max-1024:my-[13px]' src="/public/assets/img/logo-guess-header.svg" alt="GuessLogo" />
+              <img className='w-[111px] h-[20px] mr-[25px] max-1024:my-[13px]' src="/assets/img/logo-guess-header.svg" alt="GuessLogo" />
             </Link>
             <ul className='flex max-1024:hidden'>
               {
@@ -85,8 +85,8 @@ function Header() {
                           <div>
                             <p className="text-sm pl-3 my-1">{item.name}</p>
                             <div className="flex pl-[10px] items-center gap-1">
-                              <p className="text-sm line-through ">139.95</p>
-                              <p className="text-red-600">128.55</p>
+                              <p className="text-sm line-through ">{item.price}</p>
+                              <p className="text-red-600 text-sm">${(item.price - ((item.price * item.discount) / 100)).toFixed(2)}</p>
                             </div>
                             <div className="flex pl-3 gap-2 mt-2 items-center">
                               <p>Colors:</p>
@@ -185,13 +185,13 @@ function Header() {
                   <div>
                     <p className="text-sm pl-3 my-1">{item.name}</p>
                     <div className="flex pl-[10px] items-center gap-1">
-                      <p className="text-sm line-through ">139.95</p>
-                      <p className="text-red-600">128.55</p>
+                    <p className="text-sm line-through ">{item.price}</p>
+                    <p className="text-red-600 text-sm">${(item.price - ((item.price * item.discount) / 100)).toFixed(2)}</p>
                     </div>
                     <div className="flex pl-3 gap-2 mt-2 items-center">
                       <p>Colors:</p>
                       {
-                        item.Colors.map((c, i) => <div key={i} className="rounded-[50%] w-4 h-4 " style={{ backgroundColor: c }}></div>)
+                        item.Colors.map((c, i) => <div key={i} className="rounded-[50%] w-4 h-4 " style={{ backgroundColor: c, border:c=='WHITE'?'1px solid black':'' }}></div>)
                       }
                     </div>
                   </div>

@@ -98,8 +98,8 @@ function Details() {
 
                             </div>
                             <div className='  text-[16px] tracking-[.5px]'>
-                                <span className='mr-[5px] font-bold' >${singleProduct.price}</span>
-                                <span className='line-through mr-[10px] text-[#71767f]'>${(singleProduct.price - ((singleProduct.price * singleProduct.discount) / 100)).toFixed(2)}</span>
+                                <span className=' mr-[5px] font-bold '>${(singleProduct.price - ((singleProduct.price * singleProduct.discount) / 100)).toFixed(2)}</span>
+                                <span className='line-through mr-[10px] text-[#71767f]' >${singleProduct.price}</span>
                                 <span className='text-[#71767f]' >({singleProduct.discount}% OFF)</span>
                             </div>
                             <div>
