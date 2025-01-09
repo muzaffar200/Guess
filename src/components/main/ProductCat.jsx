@@ -30,19 +30,21 @@ function ProductCat() {
     const discount = searchParams.get('discount') || ''
     const maxPrice = searchParams.get('maxPrice') || ''
     const minPrice = searchParams.get('minPrice') || ''
+    const sortOrder = searchParams.get('sortOrder') || 'asc'
 
 
-
-    useEffect(() => {
-        subId ? getSubCategory(subId, limit, Page, size, color, discount, minPrice, maxPrice).then(res => SetSubidData(res)) :
-            getCategory(catId, limit, Page, size, color, discount, minPrice, maxPrice).then(res => SetSubidData(res))
-
-
-    }, [catId, subId, limit, Page, size, color, minPrice, maxPrice])
 
 
     useEffect(() => {
-        window.scrollTo(0, 0); // Səhifə yuxarıya sürüşdürülür
+        subId ? getSubCategory(subId, limit, Page, size, color, discount, minPrice, maxPrice,sortOrder).then(res => SetSubidData(res)) :
+            getCategory(catId, limit, Page, size, color, discount, minPrice, maxPrice,sortOrder).then(res => SetSubidData(res))
+
+
+    }, [catId, subId, limit, Page, size, color, minPrice, maxPrice,sortOrder])
+
+
+    useEffect(() => {
+        window.scrollTo(0, 0)
       }, []);
     function changePage(increment) {
         const params = Object.fromEntries(searchParams)
@@ -104,6 +106,11 @@ function ProductCat() {
             setSearchParams({ ...params, 'minPrice': min, 'maxPrice': max, 'page': 1 })
         }
     }
+
+    function addSort(order) {
+        const params = Object.fromEntries(searchParams)
+        setSearchParams({ ...params, 'sortOrder': order})
+    }
     function cardPopup(id) {
         const test = togglePopup.includes(id)
         if (test) {
@@ -158,8 +165,8 @@ function ProductCat() {
                         <div className=''>
                             <p onClick={() => { SetFeatured(!Featured) }} className=' cursor-pointer flex items-center underline max-1024:hidden '>Featured <IoIosArrowDown className='ml-[5px]' /></p>
                             <div className={`bg-white border px-[10px]  z-40 absolute top-[23px] w-full left-0   ${Featured ? 'block' : 'hidden'}`} >
-                                <p className='py-[5px]'>Price: low to high</p>
-                                <p className='py-[5px]'>Price: high to low</p>
+                                <p onClick={()=>{addSort('asc')}} className='py-[5px] cursor-pointer'>Price: low to high</p>
+                                <p onClick={()=>{addSort('desc')}} className='py-[5px] cursor-pointer'>Price: high to low</p>
                             </div>
                         </div>
                     </div>
@@ -179,7 +186,7 @@ function ProductCat() {
                             <div onClick={() => { toggleFilter('MobilFilter') }} className={`cursor-pointer  flex items-center  pl-[10px] border-l-0 border py-[10px] `} ><span className='mr-[5px]'>Filter</span> <IoIosArrowDown /></div>
 
                         </div>
-                        <div className={`absolute px-[15px] filterrr top-0 left-0 transition-all  w-full duration-500 ease-in-out bg-[#fff] z-10 h-full overflow-hidden   ${OpenFilter['MobilFilter'] ? 'max-h-[100vh]' : 'max-h-0'}`}>
+                        <div className={`absolute px-[15px] filterrr top-0 left-0 transition-all  w-full duration-500 ease-in-out bg-[#fff] z-10 h-full overflow-hidden   ${OpenFilter['MobilFilter'] ? 'max-h-[150vh]' : 'max-h-0'}`}>
                             <div className='flex items-center justify-between pb-[30px] pt-[20px] border-b border-black'>
                                 <span className='text-[18px]'>Filter</span>
                                 <span className='text-[18px]'>{SubidData && SubidData.meta.totalProducts}Styles</span>

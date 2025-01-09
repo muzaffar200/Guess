@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-// import CheckBox from './Checkout/CheckBox';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -72,7 +71,6 @@ const Footer = () => {
       ]
     }
   ]
-
   const [checkbox, setCheckbox] = useState()
   const [flag, setFlag] = useState(null)
 
@@ -98,7 +96,6 @@ const Footer = () => {
             </div>
           )
         })}
-        {/* Newsletter Section */}
         <div className='w-full flex justify-center'>
           <div>
             <h4 className="text-red-500 font-bold mb-2">BE THE FIRST TO KNOW</h4>
@@ -124,7 +121,7 @@ const Footer = () => {
                 <button className="px-6 py-4 bg-black text-white rounded-r-md whitespace-nowrap select-none">Sign Up</button>
               </div>
               <label className="flex items-center mt-4">
-                {/* <CheckBox /> */}
+
                 <span className="ml-2 text-gray-600 select-none">By joining, you agree to GUESS Terms & Conditions</span>
               </label>
             </form>
