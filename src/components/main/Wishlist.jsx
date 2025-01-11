@@ -49,9 +49,9 @@ function Wishlist() {
                                                     <p className='border-b pb-[5px]'>Color: <span className='ml-[3px]'>{Array.isArray(item.Colors) ? item.Colors[0] : item.Colors}</span></p>
                                                     <div className=' border-b py-[5px] justify-between flex items-center '>
 
-                                                        <span className='underline text-[15px]'>
+                                                        <span   className='underline text-[15px]'>
                                                             {Array.isArray(item.Size) ?
-                                                                'Select size' : 'Size:' + item.Size}
+                                                                <span onClick={() => { handleEdit(item) }}>Select size</span> : <span>Size: {item.Size}</span>}
                                                         </span>
 
                                                         <span className='text-[14px]'>Qty:<span className='ml-[3px]'>1</span></span>

@@ -78,17 +78,19 @@
 }
 body{
   position: relative;
+  /* overflow-y: hidden; */
 }
+
 .popupShadow{
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   z-index: 9999!important;
 }
 
   .swiper-wrapper {
-    overflow: visible !important; /* Popup-un görünməsi üçün */
+    overflow: visible !important
   }
   
   .swiper-slide {
-    overflow: visible !important; /* Hər slayd üçün */
+    overflow: visible !important
   }
   

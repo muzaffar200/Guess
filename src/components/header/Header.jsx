@@ -18,9 +18,9 @@ function Header() {
   const [openSubcategory, setOpenSubcategory] = useState(true)
   const [ToggleSearch, setToggleSearch] = useState(false)
   const [searchValue, setsearchValue] = useState(false)
-  const [viewAll,setViewAll ] = useState('')
+  const [viewAll, setViewAll] = useState('')
   const [SearchData, SetSearchData] = useState([])
-  const {DATAbasket}=useContext(Basket)
+  const { DATAbasket } = useContext(Basket)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -30,6 +30,16 @@ function Header() {
     }
   }, [searchValue])
 
+  function toggleMenu() {
+    if (categoryStyle) {
+      document.body.style.overflow = ""
+    }
+    else {
+      document.body.style.overflow = "hidden"
+    }
+    SetCategoryStyle(!categoryStyle)
+
+  }
   return (
     <>
       <header className=' relative  border max-1024:border-0'>
@@ -111,21 +121,21 @@ function Header() {
                 <Link to={'/wishlist'}><IoMdHeartEmpty className="text-[24px] max-1024:text-[29px]" /></Link>
                 <span className="absolute right-[-9px] top-[3px] max-1024:top-[6px] text-xs ">{wishlistDATA.length ? wishlistDATA.length : ''}</span>
               </div>
-              <div  className="relative mr-[5px]">
-              <Link to={'/cart'}><IoBagHandleOutline className="text-[24px] max-1024:text-[29px]" /> </Link>
-              <span className="absolute right-[-9px] top-[3px] max-1024:top-[6px] text-xs ">{DATAbasket.length ? DATAbasket.length : ''}</span>
+              <div className="relative mr-[5px]">
+                <Link to={'/cart'}><IoBagHandleOutline className="text-[24px] max-1024:text-[29px]" /> </Link>
+                <span className="absolute right-[-9px] top-[3px] max-1024:top-[6px] text-xs ">{DATAbasket.length ? DATAbasket.length : ''}</span>
 
               </div>
               {categoryStyle === false && (
                 <HiMiniBars3
-                  onClick={() => SetCategoryStyle(true)}
+                  onClick={() => toggleMenu()}
                   className="text-[24px] hidden max-1024:block max-1024:text-[29px]"
                 />
               )}
 
               {categoryStyle === true && (
                 <MdClose
-                  onClick={() => SetCategoryStyle(false)}
+                  onClick={() => toggleMenu()}
                   className="text-[24px] hidden max-1024:block max-1024:text-[29px]"
                 />
               )}
@@ -134,12 +144,12 @@ function Header() {
 
           </div>
         </div>
-        <div className={`absolute w-full font-[300] overflow-hidden z-10 duration-300 bg-white  ${categoryStyle ? 'right-0' : 'hidden'}`}>
+        <div className={`absolute w-full font-[300] overflow-hidden z-10 duration-300 bg-white h-[100vh]  ${categoryStyle ? 'right-0' : 'hidden'}`}>
           <ul >
             <li className=' py-[10px] px-[30px] text-[1.2rem] border-b-2'><p className=" ">Hi, <a className=" font-[300] underline cursor-pointer" >Sign-in or register</a></p></li>
             {
               categoryAll && categoryAll.map((item, i) =>
-                <li key={i} onClick={() => { setDataSubcategory(item.Subcategory), setOpenSubcategory(!openSubcategory),setViewAll(item.id)}}
+                <li key={i} onClick={() => { setDataSubcategory(item.Subcategory), setOpenSubcategory(!openSubcategory), setViewAll(item.id) }}
                   className=' px-[30px] text-[1.2rem] tracking-[.05em] py-[10px] flex items-center justify-between border-b-2'
                 >{item.name}
                   <IoIosArrowForward /></li>)
@@ -148,9 +158,9 @@ function Header() {
           <div className={`absolute h-full w-full   duration-300 font-[300] z-50 top-0 bg-white ${openSubcategory ? 'translate-x-full' : "-translate-x-0"}`} >
             <ul >
               <li onClick={() => { setOpenSubcategory(!openSubcategory) }} className='px-[30px] py-[15px] text-[20px]'><FaArrowLeft /></li>
-              <Link to={`/product/all/${viewAll}`} className='block px-[30px] text-[1.2rem] tracking-[.05em] py-[10px] border-b-2'>View all</Link>
+              <li onClick={() => { SetCategoryStyle(false), navigate(`/product/${viewAll}`) }} className='block px-[30px] text-[1.2rem] tracking-[.05em] py-[10px] border-b-2'>View all</li>
               {
-                DataSubcategory && DataSubcategory.map((item, i) => <Link to={`/product/${item.id}`} ><li key={i} className=' px-[30px] text-[1.2rem] tracking-[.05em] py-[10px] border-b-2'>{item.name}</li></Link>)
+                DataSubcategory && DataSubcategory.map((item, i) => <li onClick={() => { SetCategoryStyle(false), navigate(`/product/${item.id}`) }} ><li key={i} className=' px-[30px] text-[1.2rem] tracking-[.05em] py-[10px] border-b-2'>{item.name}</li></li>)
               }
             </ul>
           </div>
@@ -185,13 +195,13 @@ function Header() {
                   <div>
                     <p className="text-sm pl-3 my-1">{item.name}</p>
                     <div className="flex pl-[10px] items-center gap-1">
-                    <p className="text-sm line-through ">{item.price}</p>
-                    <p className="text-red-600 text-sm">${(item.price - ((item.price * item.discount) / 100)).toFixed(2)}</p>
+                      <p className="text-sm line-through ">{item.price}</p>
+                      <p className="text-red-600 text-sm">${(item.price - ((item.price * item.discount) / 100)).toFixed(2)}</p>
                     </div>
                     <div className="flex pl-3 gap-2 mt-2 items-center">
                       <p>Colors:</p>
                       {
-                        item.Colors.map((c, i) => <div key={i} className="rounded-[50%] w-4 h-4 " style={{ backgroundColor: c, border:c=='WHITE'?'1px solid black':'' }}></div>)
+                        item.Colors.map((c, i) => <div key={i} className="rounded-[50%] w-4 h-4 " style={{ backgroundColor: c, border: c == 'WHITE' ? '1px solid black' : '' }}></div>)
                       }
                     </div>
                   </div>
