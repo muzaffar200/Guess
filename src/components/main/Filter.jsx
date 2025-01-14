@@ -9,7 +9,7 @@ function Filter({ title, options, isOpen, toggleFilter, addOption, element, type
     const PriceNum = [25, 50, 100, 150, 200]
 
     return (
-        <div className='border-b border-black py-[18px] relative'>
+        <div className={`border-b border-black py-[18px]  relative ${type=='price'?'mb-[50px]':''}`}>
             <div onClick={() => { toggleFilter(title) }} className='flex justify-between items-center'>
                 <p className='text-[17px] '>{title}</p>
                 <IoIosArrowDown className={`text-[20px]  duration-500  ${isOpen ? 'rotate-180' : 'rotate-0'}`} />
@@ -56,7 +56,7 @@ function Filter({ title, options, isOpen, toggleFilter, addOption, element, type
 
                                                     return (
                                                         <div key={i} onClick={() => { addPrice(item, item * 2) }} className="flex items-center my-[8px]"  >
-                                                            <div className='w-[16px] flex items-center justify-center h-[16px] rounded-[50%] border border-black mr-[10px]' >
+                                                            <div className='w-[16px] flex items-center justify-center h-[16px]  rounded-[50%] border border-black mr-[10px]' >
                                                                 <FaCheck className={`text-[10px] `} style={{ display: item == minPrice && item * 2 == maxPrice ? 'block' : 'none' }} />
                                                             </div>
                                                             <div className="text-[14px]">

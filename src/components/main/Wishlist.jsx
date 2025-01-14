@@ -25,7 +25,15 @@ function Wishlist() {
         }
 
     }
+    function WishlistQty(qty,id) {
+        console.log(qty);
+        
+        const index = wishlistDATA.findIndex((item, _) => item.id == id)
+        wishlistDATA[index] = { ...wishlistDATA[index], 'quantity':qty }
+        setwishlistDATA(wishlistDATA)
+        localStorage.setItem('wishlist', JSON.stringify(wishlistDATA))
 
+    }
     return (
         <>
             <main className=' max-w-[800px] max-1024:max-w-[320px] m-auto'>
@@ -49,12 +57,22 @@ function Wishlist() {
                                                     <p className='border-b pb-[5px]'>Color: <span className='ml-[3px]'>{Array.isArray(item.Colors) ? item.Colors[0] : item.Colors}</span></p>
                                                     <div className=' border-b py-[5px] justify-between flex items-center '>
 
-                                                        <span   className='underline text-[15px]'>
+                                                        <span className='underline text-[15px]'>
                                                             {Array.isArray(item.Size) ?
-                                                                <span onClick={() => { handleEdit(item) }}>Select size</span> : <span>Size: {item.Size}</span>}
+                                                                <span className='cursor-pointer' onClick={() => { handleEdit(item) }}>Select size</span> : <span>Size: {item.Size}</span>}
                                                         </span>
 
-                                                        <span className='text-[14px]'>Qty:<span className='ml-[3px]'>1</span></span>
+                                                        <span className='text-[14px]'>Qty:
+                                                            <select value={item.quantity} onChange={(e) => { WishlistQty(e.target.value, item.id) }} className='w-[50px]' name="" id="">
+                                                                {
+                                                                    Array(10).fill('').map((_, index) => {
+                                                                        return (
+                                                                            <option key={index} value={index + 1}>{index + 1}</option>
+                                                                        )
+                                                                    })
+                                                                }
+                                                            </select>
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -69,7 +87,7 @@ function Wishlist() {
 
                                         </div>
                                         <div
-                                            onClick={() => { addToBasket(item.id, item.name, item.price, item.discount, item.Colors, item.Size, item.images[0]),addToWishlist(item) }}
+                                            onClick={() => { addToBasket(item.id, item.name, item.price, item.discount, item.Colors, item.Size, item.images[0],item.quantity), addToWishlist(item)}}
                                             className='w-[328px] pt-[30px] max-1024:p-0 max-1024:w-full max-1024:px-[15px] max-1024:pb-[35px]'
                                             style={{ display: Array.isArray(item.Size) ? 'none' : 'block' }}
                                         >

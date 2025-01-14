@@ -29,7 +29,7 @@ function BasketContext({ children }) {
                 discount,
                 color,
                 size,
-                'quantity': Qty || 1
+                'quantity': Qty||1
             }
             ]
 

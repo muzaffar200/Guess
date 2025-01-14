@@ -14,8 +14,6 @@ function ShoppingBag() {
 
     function MoveToFavorites(id) {
         getProductId(id).then(res => addToWishlist(res))
-
-
     }
 
     function totalPrice() {

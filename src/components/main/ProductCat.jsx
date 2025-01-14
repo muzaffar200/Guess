@@ -186,7 +186,7 @@ function ProductCat() {
                             <div onClick={() => { toggleFilter('MobilFilter') }} className={`cursor-pointer  flex items-center  pl-[10px] border-l-0 border py-[10px] `} ><span className='mr-[5px]'>Filter</span> <IoIosArrowDown /></div>
 
                         </div>
-                        <div className={`absolute px-[15px] filterrr top-0 left-0 transition-all  w-full duration-500 ease-in-out bg-[#fff] z-10 h-full overflow-hidden   ${OpenFilter['MobilFilter'] ? 'max-h-[150vh]' : 'max-h-0'}`}>
+                        <div className={`absolute px-[15px] filterrr top-0 left-0 transition-all  w-full duration-500 ease-in-out bg-[#fff] z-10  overflow-hidden   ${OpenFilter['MobilFilter'] ? 'max-h-auto' : 'max-h-0'}`}>
                             <div className='flex items-center justify-between pb-[30px] pt-[20px] border-b border-black'>
                                 <span className='text-[18px]'>Filter</span>
                                 <span className='text-[18px]'>{SubidData && SubidData.meta.totalProducts}Styles</span>

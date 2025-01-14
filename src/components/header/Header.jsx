@@ -10,6 +10,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom';
 import { getProductSearch } from '../../service/api';
 import { Basket } from '../../context/BasketContext';
+import DropdownCart from '../main/DropdownCart';
 
 function Header() {
   const [categoryStyle, SetCategoryStyle] = useState(false)
@@ -17,6 +18,7 @@ function Header() {
   const [DataSubcategory, setDataSubcategory] = useState(null);
   const [openSubcategory, setOpenSubcategory] = useState(true)
   const [ToggleSearch, setToggleSearch] = useState(false)
+  const [showCartDropdown, setShowCartDropdown] = useState(false);
   const [searchValue, setsearchValue] = useState(false)
   const [viewAll, setViewAll] = useState('')
   const [SearchData, SetSearchData] = useState([])
@@ -31,6 +33,8 @@ function Header() {
   }, [searchValue])
 
   function toggleMenu() {
+    console.log(window.location.pathname)
+
     if (categoryStyle) {
       document.body.style.overflow = ""
     }
@@ -40,9 +44,21 @@ function Header() {
     SetCategoryStyle(!categoryStyle)
 
   }
+  function onMausCart(para) {
+
+    if (window.location.pathname == '/cart') {
+      setShowCartDropdown()
+    }
+    else {
+      setShowCartDropdown(para)
+    }
+  }
   return (
     <>
       <header className=' relative  border max-1024:border-0'>
+        {showCartDropdown  ?
+          <DropdownCart setShowCartDropdown={setShowCartDropdown} /> : ''
+        }
         <div className='w-[95%] mx-auto   flex justify-between items-center '>
           <div className='flex items-center'>
             <Link to={'/'}>
@@ -68,7 +84,7 @@ function Header() {
             </ul>
           </div>
           <div className='flex relative '>
-            <p className=" text-[.81rem] px-[1em]  py-[5px] max-1024:hidden ">Hi, <a className="font-normal underline cursor-pointer" >Sign-in or register</a></p>
+            <p className=" text-[.81rem] px-[1em]  py-[5px] max-1024:hidden flex items-center">Hi, <a className="font-normal underline cursor-pointer" >Sign-in or register</a></p>
             <div className="flex items-center border-l-2 border-l-[#f2f2f2] gap-[15px] max-1024:border-0">
 
               <div
@@ -121,10 +137,15 @@ function Header() {
                 <Link to={'/wishlist'}><IoMdHeartEmpty className="text-[24px] max-1024:text-[29px]" /></Link>
                 <span className="absolute right-[-9px] top-[3px] max-1024:top-[6px] text-xs ">{wishlistDATA.length ? wishlistDATA.length : ''}</span>
               </div>
-              <div className="relative mr-[5px]">
-                <Link to={'/cart'}><IoBagHandleOutline className="text-[24px] max-1024:text-[29px]" /> </Link>
+              <div
+                onMouseEnter={() => onMausCart(true)}
+                className="relative mr-[5px]
+              ">
+                <Link
+                  to={'/cart'}
+                  onClick={() => { setShowCartDropdown(false) }}
+                ><IoBagHandleOutline className="text-[24px] max-1024:text-[29px]" /> </Link>
                 <span className="absolute right-[-9px] top-[3px] max-1024:top-[6px] text-xs ">{DATAbasket.length ? DATAbasket.length : ''}</span>
-
               </div>
               {categoryStyle === false && (
                 <HiMiniBars3
@@ -158,9 +179,9 @@ function Header() {
           <div className={`absolute h-full w-full   duration-300 font-[300] z-50 top-0 bg-white ${openSubcategory ? 'translate-x-full' : "-translate-x-0"}`} >
             <ul >
               <li onClick={() => { setOpenSubcategory(!openSubcategory) }} className='px-[30px] py-[15px] text-[20px]'><FaArrowLeft /></li>
-              <li onClick={() => { SetCategoryStyle(false), navigate(`/product/${viewAll}`) }} className='block px-[30px] text-[1.2rem] tracking-[.05em] py-[10px] border-b-2'>View all</li>
+              <li onClick={() => { toggleMenu(), navigate(`/product/${viewAll}`) }} className='block px-[30px] text-[1.2rem] tracking-[.05em] py-[10px] border-b-2'>View all</li>
               {
-                DataSubcategory && DataSubcategory.map((item, i) => <li onClick={() => { SetCategoryStyle(false), navigate(`/product/${item.id}`) }} ><li key={i} className=' px-[30px] text-[1.2rem] tracking-[.05em] py-[10px] border-b-2'>{item.name}</li></li>)
+                DataSubcategory && DataSubcategory.map((item, i) => <li onClick={() => { toggleMenu(), navigate(`/product/${item.id}`) }} ><li key={i} className=' px-[30px] text-[1.2rem] tracking-[.05em] py-[10px] border-b-2'>{item.name}</li></li>)
               }
             </ul>
           </div>
