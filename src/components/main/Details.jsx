@@ -104,8 +104,8 @@ function Details() {
                             </div>
                             <div>
                                 <div className='font-bold text-[15px] pt-[15px] pb-[8px]'>
-                                    <span>Color:</span>
-                                    <span>Red</span>
+                                    <span className='mr-[5px]'>Color:</span>
+                                    <span>{Color}</span>
                                 </div>
                                 <div className='flex gap-[5px] cursor-pointer'>
                                     {

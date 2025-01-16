@@ -146,7 +146,7 @@ function ProductCat() {
 
                         <div className='flex items-center max-1024:hidden '>
                             <IoIosArrowBack onClick={() => { changePage(-1) }} className='cursor-pointer' />
-                            <select value={Page} onChange={(e) => { setSearchParams({ 'page': e.target.value }) }} >
+                            <select value={Page} className=' outline-none' onChange={(e) => { setSearchParams({ 'page': e.target.value }) }} >
                                 {
                                     SubidData && Array(SubidData.meta.totalPages).fill("").map((item, i) => <option key={i} >{i + 1}</option>)
                                 }
@@ -158,9 +158,9 @@ function ProductCat() {
                     <div className='flex items-center relative gap-[15px] '>
                         <div className='max-1024:hidden'>
                             <span>View</span>
-                            <span onClick={() => { SetCardLayout(2) }} className=' px-[5px]'>2</span>
-                            <span onClick={() => { SetCardLayout(4) }} className=' px-[5px] border-l border-r'>4</span>
-                            <span onClick={() => { SetCardLayout(6) }} className=' px-[5px]'>6</span>
+                            <span onClick={() => { SetCardLayout(2) }} className=' cursor-pointer px-[5px]'>2</span>
+                            <span onClick={() => { SetCardLayout(4) }} className=' cursor-pointer px-[5px] border-l border-r'>4</span>
+                            <span onClick={() => { SetCardLayout(6) }} className=' cursor-pointer px-[5px]'>6</span>
                         </div>
                         <div className=''>
                             <p onClick={() => { SetFeatured(!Featured) }} className=' cursor-pointer flex items-center underline max-1024:hidden '>Featured <IoIosArrowDown className='ml-[5px]' /></p>
@@ -367,7 +367,7 @@ function ProductCat() {
                     }
                 </div>
             </div>
-            <div className='flex justify-center gap-[15px]'>
+            <div className='flex justify-center gap-[15px] pt-[40px]'>
 
                 <div className='flex items-center relative '>
                     <div onClick={() => { SetViwe(!Viwe) }} className='flex items-center cursor-pointer'><span className='underline'>Viwe {limit}</span>
@@ -380,7 +380,7 @@ function ProductCat() {
                 </div>
                 <div className='flex items-center '>
                     <IoIosArrowBack onClick={() => { changePage(-1) }} className='cursor-pointer' />
-                    <select value={Page} onChange={(e) => { setSearchParams({ 'page': e.target.value }) }} >
+                    <select className=' outline-none' value={Page} onChange={(e) => { setSearchParams({ 'page': e.target.value }) }} >
                         {
                             SubidData && Array(SubidData.meta.totalPages).fill("").map((item, i) => <option key={i} >{i + 1}</option>)
                         }

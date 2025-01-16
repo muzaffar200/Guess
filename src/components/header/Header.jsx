@@ -53,6 +53,11 @@ function Header() {
       setShowCartDropdown(para)
     }
   }
+  function getTotalItems() {
+    return DATAbasket.reduce((total, item) => total + (Number(item.quantity) || 0), 0);
+}
+
+
   return (
     <>
       <header className=' relative  border max-1024:border-0'>
@@ -145,7 +150,7 @@ function Header() {
                   to={'/cart'}
                   onClick={() => { setShowCartDropdown(false) }}
                 ><IoBagHandleOutline className="text-[24px] max-1024:text-[29px]" /> </Link>
-                <span className="absolute right-[-9px] top-[3px] max-1024:top-[6px] text-xs ">{DATAbasket.length ? DATAbasket.length : ''}</span>
+                <span className="absolute right-[-9px] top-[3px] max-1024:top-[6px] text-xs ">{getTotalItems() ?getTotalItems() : ''}</span>
               </div>
               {categoryStyle === false && (
                 <HiMiniBars3

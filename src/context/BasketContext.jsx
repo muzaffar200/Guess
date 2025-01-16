@@ -5,14 +5,11 @@ export const Basket = createContext([])
 function BasketContext({ children }) {
     const [DATAbasket, setDATAbasket] = useState([])
     function addToBasket(id, name, price, discount, color, size, img, Qty) {
-        console.log(Qty);
-
         const index = DATAbasket.findIndex((item) => item.id == id && item.color == color && item.size == size)
         let updatedBasket = [...DATAbasket]
         if (index != -1) {
             if (Qty) {
                 updatedBasket[index].quantity = +updatedBasket[index].quantity + +Qty
-
             }
             else {
                 updatedBasket[index].quantity = +updatedBasket[index].quantity + 1

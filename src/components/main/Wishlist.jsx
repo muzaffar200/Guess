@@ -40,7 +40,7 @@ function Wishlist() {
                 <div>
                     <h1 className='font-bold text-[18px] border-b py-[25px] px-[15px]'>Favorites <span className='font-normal text-[14px]'>({wishlistDATA.length} Styles)</span></h1>
                     {
-                        wishlistDATA.length > 0 ?
+                        wishlistDATA?.length > 0 ?
                             wishlistDATA.map((item, i) => {
                                 return (
                                     <div key={i} className='flex max-1024:block border-b relative'>
@@ -87,11 +87,12 @@ function Wishlist() {
 
                                         </div>
                                         <div
-                                            onClick={() => { addToBasket(item.id, item.name, item.price, item.discount, item.Colors, item.Size, item.images[0],item.quantity), addToWishlist(item)}}
+                                           
                                             className='w-[328px] pt-[30px] max-1024:p-0 max-1024:w-full max-1024:px-[15px] max-1024:pb-[35px]'
                                             style={{ display: Array.isArray(item.Size) ? 'none' : 'block' }}
                                         >
                                             <div
+                                             onClick={() => { addToBasket(item.id, item.name, item.price, item.discount, item.Colors, item.Size, item.images[0],item.quantity), addToWishlist(item)}}
                                                 className='flex justify-center items-center my-[20px] max-1024:my-0 h-[44px]  rounded-[22px]    bg-transparent  border-black border-[2px] text-[#000] hover:bg-black hover:text-[#fff] cursor-pointer'
                                             >Add to bag</div>
                                         </div>

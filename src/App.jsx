@@ -6,6 +6,7 @@ import ProductCat from "./components/main/ProductCat"
 import Details from "./components/main/Details"
 import Wishlist from "./components/main/Wishlist"
 import ShoppingBag from "./components/main/ShoppingBag"
+import Checkout from "./components/main/Checkout"
 
 function App() {
 
@@ -18,8 +19,8 @@ function App() {
           <Route  path="/product/all/:catId" element={<ProductCat/>}/>
           <Route  path="/product/detalis/:productId" element={<Details/>}/>
           <Route  path="/wishlist" element={<Wishlist/>}/>
-
           <Route  path="/cart" element={<ShoppingBag/>}/>
+          <Route  path="/checkout" element={<Checkout/>}/>
         </Route>
       </Routes>
     </>

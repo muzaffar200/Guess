@@ -15,7 +15,10 @@ function ShoppingBag() {
     function MoveToFavorites(id) {
         getProductId(id).then(res => addToWishlist(res))
     }
-
+    function getTotalItems() {
+        return DATAbasket.reduce((total, item) => total + (Number(item.quantity) || 0), 0);
+    }
+    
     function totalPrice() {
         return DATAbasket.reduce((acc, item) => {
             const discountedPrice = item.price - (item.price * item.discount) / 100;
@@ -37,7 +40,7 @@ function ShoppingBag() {
     return (
         <main>
             <div className='w-[970px] m-auto max-1024:max-w-[375px] max-447:max-w-[95%]'>
-                <h1 className='pl-[15px] font-bold text-[17px] py-[20px]'>Shopping bag <span className='text-[#71767f] text-[15px]'>({DATAbasket.length})</span></h1>
+                <h1 className='pl-[15px] font-bold text-[17px] py-[20px]'>Shopping bag <span className='text-[#71767f] text-[15px]'>({getTotalItems()})</span></h1>
                 {
                     DATAbasket.length > 0 ?
                         <div className='flex justify-between max-1024:block gap-[30px]'>
@@ -62,14 +65,16 @@ function ShoppingBag() {
                                                                 <span className='underline text-[15px]'>Size: <span>{item.size}</span></span>
 
                                                                 <span className='text-[14px]'>Qty:
-                                                                    <select value={item.quantity} onChange={(e) => { changeQuantity(e.target.value, item.id) }} className='w-[50px]' name="" id="">
-                                                                        {
-                                                                            Array(10).fill('').map((_, index) => {
-                                                                                return (
-                                                                                    <option key={index} value={index + 1}>{index + 1}</option>
-                                                                                )
-                                                                            })
-                                                                        }
+                                                                    <select
+                                                                        value={item.quantity} // Bu, state-dən gələn current quantity ilə sinxron olmalıdır
+                                                                        onChange={(e) => changeQuantity(e.target.value, item.id)} // Burada quantity-ni dəyişirik
+                                                                        className="w-[50px]"
+                                                                    >
+                                                                        {Array(10).fill('').map((_, index) => (
+                                                                            <option key={index} value={index + 1}>
+                                                                                {index + 1}
+                                                                            </option>
+                                                                        ))}
                                                                     </select>
                                                                 </span>
                                                             </div>
@@ -107,9 +112,9 @@ function ShoppingBag() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className='  cursor-pointer bg-black h-[50px] rounded-[25px] border border-black flex items-center justify-center hover:bg-[#fff]  group   '>
+                                <Link to={'/checkout'} className='  cursor-pointer bg-black h-[50px] rounded-[25px] border border-black flex items-center justify-center hover:bg-[#fff]  group   '>
                                     <p className='text-[#fff] font-bold tracking-[1.96px] group-hover:text-[#000]'>Checkout</p>
-                                </div>
+                                </Link>
                                 <p className='text-[15px] tracking-[.5px] py-[20px]'>4 interest-free payments of $44.65 with <span className=' font-bold text-[17px]'>Klarna.</span></p>
                                 <div className='text-[#666] border border-[#666] p-[15px] mb-[18px]'>
                                     <span>Free shipping</span>
@@ -150,6 +155,7 @@ function ShoppingBag() {
                             <div className='text-[17px]  p-[24px] text-center border-b border-t'>
                                 Free shipping on All orders
                             </div>
+
                         </div>
                 }
             </div>

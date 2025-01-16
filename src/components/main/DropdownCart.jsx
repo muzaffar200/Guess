@@ -18,12 +18,16 @@ function DropdownCart({ setShowCartDropdown }) {
         setDATAbasket(updatedBasket)
         localStorage.setItem('basket', JSON.stringify(updatedBasket))
     }
+    function getTotalItems() {
+        return DATAbasket.reduce((total, item) => total + (Number(item.quantity) || 0), 0);
+    }
+    
     return (
         <div
             onMouseLeave={() => { setShowCartDropdown(false) }}
             className=' max-1024:hidden w-[400px] p-[20px]  z-[1000] top-[58px] bg-white right-0 border absolute'>
             <div className='flex justify-between border-b pb-[7px]'>
-                <p className='font-bold text-[18px]'>Shopping bag <span>({DATAbasket.length})</span></p>
+                <p className='font-bold text-[18px]'>Shopping bag <span>({getTotalItems()})</span></p>
                 <Link to={'/cart'} onClick={() => { setShowCartDropdown(false) }} className='underline'>View shopping bag</Link>
             </div>
             <div className=' overflow-y-scroll py-[15px] max-h-[350px]'>
@@ -77,9 +81,9 @@ function DropdownCart({ setShowCartDropdown }) {
                     className=' w-1/2 cursor-pointer bg-black h-[45px] rounded-[22.5px] border-2 border-black flex items-center justify-center hover:bg-[#fff]  group'>
                     <p className='text-[#fff] font-bold tracking-[1.96px] group-hover:text-[#000]'>Shopping bag</p>
                 </Link>
-                <div className=' w-1/2  cursor-pointer bg-white h-[45px] rounded-[22.5px] border-2 border-black flex items-center justify-center hover:bg-[#000]  group'>
-                    <p className='text-[#000] font-bold tracking-[1.96px] group-hover:text-[#fff]'>Checkout</p>
-                </div>
+                <Link to={'/checkout'} className=' w-1/2  cursor-pointer bg-white h-[45px] rounded-[22.5px] border-2 border-black flex items-center justify-center hover:bg-[#000]  group'>
+                    <p  className='text-[#000] font-bold tracking-[1.96px] group-hover:text-[#fff]'>Checkout</p>
+                </Link>
             </div>
         </div>
     )
