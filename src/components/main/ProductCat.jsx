@@ -270,7 +270,7 @@ function ProductCat() {
                 </div>
 
 
-                <div className='flex flex-wrap !gap-[16px] w-[80%]  m-0 p-0 max-1024:w-full' >
+                <div className='flex flex-wrap !gap-[16px] max-1024:justify-center w-[80%]  m-0 p-0 max-1024:w-full' >
                     {
                         Array.isArray(SubidData?.data) && SubidData.data.length > 0 ? SubidData.data.map((item, i) => {
                             return (
