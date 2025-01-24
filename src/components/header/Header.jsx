@@ -33,8 +33,6 @@ function Header() {
   }, [searchValue])
 
   function toggleMenu() {
-    console.log(window.location.pathname)
-
     if (categoryStyle) {
       document.body.style.overflow = ""
     }
@@ -46,7 +44,7 @@ function Header() {
   }
   function onMausCart(para) {
 
-    if (window.location.pathname == '/cart') {
+    if (window.location.pathname == '/cart'||window.location.pathname == '/checkout') {
       setShowCartDropdown()
     }
     else {

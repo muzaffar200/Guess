@@ -3,7 +3,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { FiMinus } from "react-icons/fi";
 import { useState } from "react";
 
-function Filter({ title, options, isOpen, toggleFilter, addOption, element, type, addDiscount, discount, addPrice, minPrice, maxPrice }) {
+function Filter({ title, options, isOpen, toggleFilter, addOption, element, type, addDiscount, discount, addPrice , addPrice2,minPrice, maxPrice }) {
     const [input1, Setinput1] = useState('')
     const [input2, Setinput2] = useState('')
     const PriceNum = [25, 50, 100, 150, 200]
@@ -55,7 +55,7 @@ function Filter({ title, options, isOpen, toggleFilter, addOption, element, type
                                                 PriceNum.map((item, i) => {
 
                                                     return (
-                                                        <div key={i} onClick={() => { addPrice(item, item * 2) }} className="flex items-center my-[8px]"  >
+                                                        <div key={i} onClick={() => { addPrice(item, item * 2) ,Setinput1(''),Setinput2('')}} className="flex  cursor-pointer items-center my-[8px]"  >
                                                             <div className='w-[16px] flex items-center justify-center h-[16px]  rounded-[50%] border border-black mr-[10px]' >
                                                                 <FaCheck className={`text-[10px] `} style={{ display: item == minPrice && item * 2 == maxPrice ? 'block' : 'none' }} />
                                                             </div>
@@ -77,15 +77,15 @@ function Filter({ title, options, isOpen, toggleFilter, addOption, element, type
                                             <div className=" flex items-center text-[15px]">
                                                 <div className="flex border-b border-black">
                                                     <span>$</span>
-                                                    <input type="number" className="w-[35px]  inp-price outline-none" onChange={(e) => { Setinput1(e.target.value) }} />
+                                                    <input type="number" value={input1} className="w-[35px]  inp-price outline-none" onChange={(e) => { Setinput1(e.target.value) }} />
                                                 </div>
                                                 <FiMinus className="mx-[15px]" />
 
                                                 <div className="flex border-b border-black">
                                                     <span>$</span>
-                                                    <input type="number" className=" inp-price inp-price w-[35px] outline-none" onChange={(e) => { Setinput2(e.target.value) }} />
+                                                    <input  type="number" value={input2} className=" inp-price inp-price w-[35px] outline-none" onChange={(e) => { Setinput2(e.target.value) }} />
                                                 </div>
-                                                <span className="border-b border-black ml-[25px] cursor-pointer" onClick={()=>{addPrice(input1,input2)}}>Apply</span>
+                                                <span className="border-b border-black ml-[25px] cursor-pointer" onClick={()=>{addPrice2(input1,input2)}}>Apply</span>
                                             </div>
                                         </div>
                                     </div>

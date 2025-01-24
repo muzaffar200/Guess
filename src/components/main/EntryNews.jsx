@@ -7,9 +7,9 @@ function EntryNews() {
       <div className=" relative  w-full">
         <img className='w-full h-auto max-768:hidden' src="/assets/img/G_Site_Home_ContentCenter_NovSS_9958_01.jpeg" alt="" />
         <img className='w-full h-auto hidden max-768:block ' src="/assets/img/G_Mobile_Home_ContentCenter_MOE_9961_01.avif" alt="" />
-        <div className='absolute right-0 top-[50%] transform -translate-y-1/2  w-[42%] m-auto max-768:top-[20%] max-768:w-full'>
-          <h1 className='text-[#423639] font-[300]  text-center  text-[70px] max-1278:text-[60px] max-1085:text-[55px] max-877:text-[45px] max-386:text-[38px]'>
-            <span className='FreightDis  text-[50px] max-1085:text-[40px] max-877:text-[35px] max-386:text-[28px]' >
+        <div className='absolute right-0 top-[45%] transform -translate-y-1/2  w-[42%] m-auto max-768:top-[20%] max-768:w-full'>
+          <h1 className='text-[#423639] font-[300]  text-center  text-[70px] max-1278:text-[60px] max-1085:text-[55px] max-877:text-[45px] max-599:text-[45px] max-768:text-[70px]  max-386:text-[38px]'>
+            <span className='FreightDis  text-[50px] max-1085:text-[40px] max-877:text-[35px] max-386:text-[28px] max-768:text-[40px] max-599:text-[35px]' >
               <span className='luxurious-script-regular '>M</span>ember <span className='luxurious-script-regular ' > P</span>review
             </span>
             <p className='FreightDis'>

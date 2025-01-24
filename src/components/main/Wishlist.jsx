@@ -17,22 +17,25 @@ function Wishlist() {
     }
     function updatedWishlist(color, size) {
         if (size) {
-            const index = wishlistDATA.findIndex((item, _) => item.id == selectedItem.id)
-            wishlistDATA[index] = { ...wishlistDATA[index], 'Colors': color, 'Size': size }
-            setwishlistDATA(wishlistDATA)
-            localStorage.setItem('wishlist', JSON.stringify(wishlistDATA))
-            setPopupVisible(false)
+            const updatedData = wishlistDATA.map(item =>
+                item.id === selectedItem.id
+                    ? { ...item, Colors: color, Size: size }
+                    : item
+            )
+            setwishlistDATA(updatedData);
+            localStorage.setItem('wishlist', JSON.stringify(updatedData));
+            setPopupVisible(false);
         }
-
     }
-    function WishlistQty(qty,id) {
-        console.log(qty);
-        
-        const index = wishlistDATA.findIndex((item, _) => item.id == id)
-        wishlistDATA[index] = { ...wishlistDATA[index], 'quantity':qty }
-        setwishlistDATA(wishlistDATA)
-        localStorage.setItem('wishlist', JSON.stringify(wishlistDATA))
-
+    
+    function WishlistQty(qty, id) {
+        const updatedData = wishlistDATA.map(item =>
+            item.id === id
+                ? { ...item, quantity: qty }
+                : item
+        )
+        setwishlistDATA(updatedData);
+        localStorage.setItem('wishlist', JSON.stringify(updatedData));
     }
     return (
         <>

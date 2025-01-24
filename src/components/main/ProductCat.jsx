@@ -32,23 +32,24 @@ function ProductCat() {
     const minPrice = searchParams.get('minPrice') || ''
     const sortOrder = searchParams.get('sortOrder') || 'asc'
 
-
-
-
     useEffect(() => {
-        subId ? getSubCategory(subId, limit, Page, size, color, discount, minPrice, maxPrice,sortOrder).then(res => SetSubidData(res)) :
-            getCategory(catId, limit, Page, size, color, discount, minPrice, maxPrice,sortOrder).then(res => SetSubidData(res))
-
-
-    }, [catId, subId, limit, Page, size, color, minPrice, maxPrice,sortOrder])
+        subId ? getSubCategory(subId, limit, Page, size, color, discount, minPrice, maxPrice, sortOrder).then(res => SetSubidData(res)) :
+            getCategory(catId, limit, Page, size, color, discount, minPrice, maxPrice, sortOrder).then(res => SetSubidData(res))
+    }, [catId, subId, limit, Page, size, color, minPrice, maxPrice, sortOrder])
 
 
     useEffect(() => {
         window.scrollTo(0, 0)
-      }, []);
-    function changePage(increment) {
+    }, []);
+    function changePage(increment, test) {
         const params = Object.fromEntries(searchParams)
-        const newPage = parseInt(Page) + increment;
+        let newPage = ''
+        if (test) {
+            newPage = increment;
+        }
+        else {
+            newPage = parseInt(Page) + +increment;
+        }
         if (newPage > 0 && newPage <= (SubidData?.meta.totalPages || 0)) {
             setSearchParams({ ...params, 'page': newPage });
         }
@@ -107,9 +108,22 @@ function ProductCat() {
         }
     }
 
+    function addPrice2(min, max) {
+        const params = Object.fromEntries(searchParams)
+        if (max.length > 0 && min.length > 0) {
+            setSearchParams({ ...params, 'minPrice': min, 'maxPrice': max, 'page': 1 })
+            // searchParams.delete('maxPrice')
+            // searchParams.delete('minPrice')
+            // setSearchParams(searchParams)
+        }
+        // else {
+        //     setSearchParams({ ...params, 'minPrice': min, 'maxPrice': max, 'page': 1 })
+        // }
+    }
+
     function addSort(order) {
         const params = Object.fromEntries(searchParams)
-        setSearchParams({ ...params, 'sortOrder': order})
+        setSearchParams({ ...params, 'sortOrder': order })
     }
     function cardPopup(id) {
         const test = togglePopup.includes(id)
@@ -146,7 +160,7 @@ function ProductCat() {
 
                         <div className='flex items-center max-1024:hidden '>
                             <IoIosArrowBack onClick={() => { changePage(-1) }} className='cursor-pointer' />
-                            <select value={Page} className=' outline-none' onChange={(e) => { setSearchParams({ 'page': e.target.value }) }} >
+                            <select value={Page} className=' outline-none' onChange={(e) => { changePage(e.target.value, 'select') }} >
                                 {
                                     SubidData && Array(SubidData.meta.totalPages).fill("").map((item, i) => <option key={i} >{i + 1}</option>)
                                 }
@@ -165,8 +179,8 @@ function ProductCat() {
                         <div className=''>
                             <p onClick={() => { SetFeatured(!Featured) }} className=' cursor-pointer flex items-center underline max-1024:hidden '>Featured <IoIosArrowDown className='ml-[5px]' /></p>
                             <div className={`bg-white border px-[10px]  z-40 absolute top-[23px] w-full left-0   ${Featured ? 'block' : 'hidden'}`} >
-                                <p onClick={()=>{addSort('asc')}} className='py-[5px] cursor-pointer'>Price: low to high</p>
-                                <p onClick={()=>{addSort('desc')}} className='py-[5px] cursor-pointer'>Price: high to low</p>
+                                <p onClick={() => { addSort('asc') }} className='py-[5px] cursor-pointer'>Price: low to high</p>
+                                <p onClick={() => { addSort('desc') }} className='py-[5px] cursor-pointer'>Price: high to low</p>
                             </div>
                         </div>
                     </div>
@@ -178,8 +192,8 @@ function ProductCat() {
                         <div className=' w-1/2  relative box-border border'>
                             <div onClick={() => { toggleFilter('Featured') }} className='flex items-center py-[10px]  pl-[10px]'>  <span className='mr-[5px]'>Sort by</span> <IoIosArrowDown /></div>
                             <div className={`absolute price top-[45px] left-0 z-10 bg-white w-full px-[10px] overflow-hidden  ${OpenFilter['Featured'] ? 'max-h-[100vh]' : 'max-h-0'}`}>
-                                <p className='py-[5px]'>Price: low to high</p>
-                                <p className='py-[5px]'>Price: high to low</p>
+                                <p onClick={() => { addSort('asc') }} className='py-[5px]'>Price: low to high</p>
+                                <p onClick={() => { addSort('desc') }} className='py-[5px]'>Price: high to low</p>
                             </div>
                         </div>
                         <div className=' w-1/2  relative '>
@@ -224,6 +238,8 @@ function ProductCat() {
                                 toggleFilter={() => toggleFilter("Price")}
                                 type={'price'}
                                 addPrice={addPrice}
+                                addPrice2={addPrice2}
+
                                 maxPrice={maxPrice}
                                 minPrice={minPrice}
                             />
@@ -262,6 +278,7 @@ function ProductCat() {
                             toggleFilter={() => toggleFilter("Price")}
                             type={'price'}
                             addPrice={addPrice}
+                            addPrice2={addPrice2}
                             maxPrice={maxPrice}
                             minPrice={minPrice}
 
@@ -270,11 +287,11 @@ function ProductCat() {
                 </div>
 
 
-                <div className='flex flex-wrap !gap-[16px] max-1024:justify-center w-[80%]  m-0 p-0 max-1024:w-full' >
+                <div className='flex flex-wrap !gap-[16px]  max-1024:justify-between w-[80%]  m-0 p-0 max-1024:w-full' >
                     {
                         Array.isArray(SubidData?.data) && SubidData.data.length > 0 ? SubidData.data.map((item, i) => {
                             return (
-                                <Link to={`/product/detalis/${item.id}`} key={i} className={` block border-box m-0 p-0 cardProduct !max-1024:flex-[0_1_calc((100%/4)-16px)]`} style={{ width: `calc((100% / ${CardLayout}) - 16px)`, transition: 'width 0.5s ease-in-out' }}>
+                                <Link to={`/product/detalis/${item.id}`} key={i} className={` block border-box m-0 p-0 cardProduct `} style={{ width: `calc((100% / ${CardLayout}) - 16px)`, transition: 'width 0.5s ease-in-out' }}>
                                     <div className='group relative'>
                                         <img className='' src={item.images[0]} alt="" />
                                         <img className=' absolute top-0 left-0 hidden group-hover:inline' src={item.images[1]} alt="" />
@@ -290,21 +307,21 @@ function ProductCat() {
                                                 {
                                                     item.Colors.map((c, i) => {
                                                         return (
-                                                            <>
-                                                                <div key={i}
-                                                                    onClick={(e) => {
-                                                                        e.preventDefault()
-                                                                        handleColorChange(c, item.id)
-                                                                    }}
-                                                                    className=' w-[30px] h-[30px] rounded-[50%] border border-[#bdbec0] relative'
-                                                                    style={{ borderColor: c == selectedColor[item.id] ? 'black' : '' }}
+
+                                                            <div key={i}
+                                                                onClick={(e) => {
+                                                                    e.preventDefault()
+                                                                    handleColorChange(c, item.id)
+                                                                }}
+                                                                className=' w-[30px] h-[30px] rounded-[50%] border border-[#bdbec0] relative'
+                                                                style={{ borderColor: c == selectedColor[item.id] ? 'black' : '' }}
+                                                            >
+                                                                <div className=' w-[25px] h-[25px]  rounded-[50%] absolute  top-[50%] left-[50%]  transform -translate-x-1/2 -translate-y-1/2 translate-[50%]'
+                                                                    style={{ backgroundColor: c }}
                                                                 >
-                                                                    <div className=' w-[25px] h-[25px]  rounded-[50%] absolute  top-[50%] left-[50%]  transform -translate-x-1/2 -translate-y-1/2 translate-[50%]'
-                                                                        style={{ backgroundColor: c }}
-                                                                    >
-                                                                    </div>
                                                                 </div>
-                                                            </>
+                                                            </div>
+
                                                         )
                                                     })
                                                 }
@@ -312,7 +329,7 @@ function ProductCat() {
                                             <p className='py-[10px]'>Select a size:</p>
                                             <div className='flex gap-[15px] text-[16px] underline'>
                                                 {
-                                                    item.Size.map((j, i) => <div onClick={(e)=>{e.preventDefault(),addToBasket(item.id,item.name,item.price,item.discount,selectedColor[item.id],j,item.images[0]),cardPopup(item.id)}}>{j}</div>)
+                                                    item.Size.map((j, i) => <div key={i} onClick={(e) => { e.preventDefault(), addToBasket(item.id, item.name, item.price, item.discount, selectedColor[item.id], j, item.images[0]), cardPopup(item.id) }}>{j}</div>)
                                                 }
                                             </div>
                                         </div>
@@ -348,13 +365,12 @@ function ProductCat() {
                                         SubidData == null ?
                                             <div>
                                                 <div className="flex items-center justify-center space-x-2">
-                                                    <div className="w-8 h-8 rounded-full animate-pulse bg-pink-500"></div>
-                                                    <div className="w-8 h-8 rounded-full animate-pulse bg-pink-500"></div>
-                                                    <div className="w-8 h-8 rounded-full animate-pulse bg-pink-500"></div>
+                                                    <div className="w-8 h-8 rounded-full animate-pulse bg-gray-400"></div>
+                                                    <div className="w-8 h-8 rounded-full animate-pulse bg-gray-400"></div>
+                                                    <div className="w-8 h-8 rounded-full animate-pulse bg-gray-400"></div>
                                                 </div>
-
-
                                             </div>
+
                                             :
                                             <>
                                                 <HiOutlineInboxStack className='text-[35px] m-auto text-[#8a8a8b]' />

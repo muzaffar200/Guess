@@ -4,16 +4,22 @@ export const Basket = createContext([])
 
 function BasketContext({ children }) {
     const [DATAbasket, setDATAbasket] = useState([])
-    function addToBasket(id, name, price, discount, color, size, img, Qty) {
+    function addToBasket(id, name, price, discount, color, size, img, Qty=1) {
+        
         const index = DATAbasket.findIndex((item) => item.id == id && item.color == color && item.size == size)
         let updatedBasket = [...DATAbasket]
+        
         if (index != -1) {
-            if (Qty) {
-                updatedBasket[index].quantity = +updatedBasket[index].quantity + +Qty
+            if (+updatedBasket[index].quantity + +Qty !=11) {
+                if (Qty) {
+                    updatedBasket[index].quantity = +updatedBasket[index].quantity + +Qty
+                }
+                else {
+                    updatedBasket[index].quantity = +updatedBasket[index].quantity + 1
+                }
             }
-            else {
-                updatedBasket[index].quantity = +updatedBasket[index].quantity + 1
-
+            else{
+                alert('This item is not available in the requested quantity')
             }
         }
         else {
@@ -26,7 +32,7 @@ function BasketContext({ children }) {
                 discount,
                 color,
                 size,
-                'quantity': Qty||1
+                'quantity': Qty || 1
             }
             ]
 
@@ -40,7 +46,7 @@ function BasketContext({ children }) {
         updatedBasket = updatedBasket.filter((item, i) => item.id != id || item.color != color || item.size != size)
         setDATAbasket(updatedBasket);
         localStorage.setItem('basket', JSON.stringify(updatedBasket))
-        
+
     }
     useEffect(() => {
         const test = localStorage.getItem('basket')

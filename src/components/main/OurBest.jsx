@@ -42,7 +42,7 @@ function OurBest() {
 
     ]
     return (
-        <>
+        <>``
             <div className='pb-[50px]'>
                 <h2 className='text-[3rem] font-[200] text-center  FreightDis italic py-[25px] max-768:text-[2.2rem] max-447:text-[1.9rem]'>Our Best Event of the Year</h2>
                 <div className='w-[95%] mx-auto '>
@@ -67,12 +67,16 @@ function OurBest() {
                                 prevEl: '.custom-swiper-button-prev',
                             }}
                             breakpoints={{
+                                1024:{
+                                    slidesPerView: 6,   
+                                    spaceBetween: 10,
+                                },
                                 768: {
-                                    slidesPerView: 6,
+                                    slidesPerView: 4.3,   
                                     spaceBetween: 10,
                                 },
                                 0: {
-                                    slidesPerView: 2.5,
+                                    slidesPerView: 2.35,
                                     spaceBetween: 10,
                                 },
                             }}
@@ -84,7 +88,7 @@ function OurBest() {
                             {
                                 cardData.map((item, i) => {
                                     return (
-                                        <SwiperSlide>
+                                        <SwiperSlide key={i}>
                                             <Link to={`/product/${item.id}`} className=' text-center block'>
                                                 <img className='w-full' src={item.img} alt="" />
                                                 <span className=' mt-[7px] inline-block FreightDis tracking-[.1rem]  text-[20px] border-b-2 border-b-[#423639] max-1085:text-[16px]  max-1085:pb-[-3px]  max-768:text-[17px] max-1085:tracking-[.05rem] max-447:text-[13px]'>{item.name}</span>
