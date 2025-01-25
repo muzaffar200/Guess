@@ -78,7 +78,7 @@ function Header() {
                           item.Subcategory.map((s, i) => { return (<Link key={i} to={`/product/${s.id}`}><li className='py-[8px] hover:underline'>{s.name}</li></Link>) })
                         }
                       </ul>
-                      <img className='w-[384px]' src={`/public/assets/img/headerList${i}.webp`} alt="" />
+                      <img className='w-[384px]' src={`/assets/img/headerList${i}.webp`} alt="" />
                     </div>
                   </div>
                 </li>) : ''
