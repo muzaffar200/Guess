@@ -46,17 +46,15 @@
   .price{
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   }
-
   @media only screen and (max-width: 1024px){
     .cardProduct{
-      flex: 0 1 calc(100% / 3 - 16px);
+      flex: 0 1 calc(100% / 3 - 10px);
       margin: 0;
       padding: 0;
     }
     .filterrr{
       overflow: hidden;
       box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-    
     }
   }
   @media only screen and (max-width: 768px){

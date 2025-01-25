@@ -112,13 +112,8 @@ function ProductCat() {
         const params = Object.fromEntries(searchParams)
         if (max.length > 0 && min.length > 0) {
             setSearchParams({ ...params, 'minPrice': min, 'maxPrice': max, 'page': 1 })
-            // searchParams.delete('maxPrice')
-            // searchParams.delete('minPrice')
-            // setSearchParams(searchParams)
         }
-        // else {
-        //     setSearchParams({ ...params, 'minPrice': min, 'maxPrice': max, 'page': 1 })
-        // }
+      
     }
 
     function addSort(order) {
@@ -151,10 +146,10 @@ function ProductCat() {
                         <div className='flex items-center relative max-1024:hidden'>
                             <div onClick={() => { SetViwe(!Viwe) }} className='flex items-center cursor-pointer'><span className='underline'>Viwe {limit}</span>
                                 < IoIosArrowDown className='text-[17px] ml-[5px]' /></div>
-                            <div className={`bg-white border px-[20px] absolute top-[33px] left-0 w-[100px] z-10 ${Viwe ? 'block' : 'hidden'}`} >
-                                <p onClick={() => { addLimit(5) }} className='py-[5px] cursor-pointer'>Viwe 5</p>
-                                <p onClick={() => { addLimit(10) }} className='py-[5px] cursor-pointer'>Viwe 10</p>
-                                <p onClick={() => { addLimit(15) }} className='py-[5px] cursor-pointer'>Viwe 15</p>
+                            <div className={`bg-white border  absolute top-[33px] left-0 w-[100px] z-10 ${Viwe ? 'block' : 'hidden'}`} >
+                                <p onClick={() => { addLimit(5) ,SetViwe(!Viwe)}} className='py-[5px]  px-[20px] hover:bg-gray-100 cursor-pointer'>Viwe 5</p>
+                                <p onClick={() => { addLimit(10),SetViwe(!Viwe) }} className='py-[5px] px-[20px] hover:bg-gray-100 cursor-pointer'>Viwe 10</p>
+                                <p onClick={() => { addLimit(15),SetViwe(!Viwe) }} className='py-[5px] px-[20px] hover:bg-gray-100 cursor-pointer'>Viwe 15</p>
                             </div>
                         </div>
 
@@ -172,15 +167,15 @@ function ProductCat() {
                     <div className='flex items-center relative gap-[15px] '>
                         <div className='max-1024:hidden'>
                             <span>View</span>
-                            <span onClick={() => { SetCardLayout(2) }} className=' cursor-pointer px-[5px]'>2</span>
-                            <span onClick={() => { SetCardLayout(4) }} className=' cursor-pointer px-[5px] border-l border-r'>4</span>
-                            <span onClick={() => { SetCardLayout(6) }} className=' cursor-pointer px-[5px]'>6</span>
+                            <span style={{fontWeight:CardLayout==2?'700':''}}  onClick={() => { SetCardLayout(2) }} className='  cursor-pointer px-[5px]'>2</span>
+                            <span style={{fontWeight:CardLayout==4?'700':''}} onClick={() => { SetCardLayout(4) }} className='  cursor-pointer px-[5px] border-l border-r'>4</span>
+                            <span style={{fontWeight:CardLayout==6?'700':''}} onClick={() => { SetCardLayout(6) }} className='  cursor-pointer px-[5px]'>6</span>
                         </div>
                         <div className=''>
                             <p onClick={() => { SetFeatured(!Featured) }} className=' cursor-pointer flex items-center underline max-1024:hidden '>Featured <IoIosArrowDown className='ml-[5px]' /></p>
-                            <div className={`bg-white border px-[10px]  z-40 absolute top-[23px] w-full left-0   ${Featured ? 'block' : 'hidden'}`} >
-                                <p onClick={() => { addSort('asc') }} className='py-[5px] cursor-pointer'>Price: low to high</p>
-                                <p onClick={() => { addSort('desc') }} className='py-[5px] cursor-pointer'>Price: high to low</p>
+                            <div className={`bg-white border  z-40 absolute top-[23px] w-full left-0   ${Featured ? 'block' : 'hidden'}`} >
+                                <p onClick={() => { addSort('asc') ,SetFeatured(!Featured)}} className='py-[5px] px-[10px]  hover:bg-gray-100  cursor-pointer'>Price: low to high</p>
+                                <p onClick={() => { addSort('desc'),SetFeatured(!Featured) }} className='py-[5px] px-[10px]  hover:bg-gray-100  cursor-pointer'>Price: high to low</p>
                             </div>
                         </div>
                     </div>
@@ -287,11 +282,11 @@ function ProductCat() {
                 </div>
 
 
-                <div className='flex flex-wrap !gap-[16px]  max-1024:justify-between w-[80%]  m-0 p-0 max-1024:w-full' >
+                <div className='flex flex-wrap gap-[16px] max-1024:gap-[15px]  max-768:justify-between w-[80%]  m-0 p-0 max-1024:w-full' >
                     {
                         Array.isArray(SubidData?.data) && SubidData.data.length > 0 ? SubidData.data.map((item, i) => {
                             return (
-                                <Link to={`/product/detalis/${item.id}`} key={i} className={` block border-box m-0 p-0 cardProduct `} style={{ width: `calc((100% / ${CardLayout}) - 16px)`, transition: 'width 0.5s ease-in-out' }}>
+                                <Link to={`/product/detalis/${item.id}`} key={i} className={`  block border-box m-0 p-0 cardProduct `} style={{ width: `calc((100% / ${CardLayout}) - 16px)`, transition: 'width 0.5s ease-in-out' }}>
                                     <div className='group relative'>
                                         <img className='' src={item.images[0]} alt="" />
                                         <img className=' absolute top-0 left-0 hidden group-hover:inline' src={item.images[1]} alt="" />
