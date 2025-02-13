@@ -173,7 +173,8 @@ function Header() {
             <li className=' py-[10px] px-[30px] text-[1.2rem] border-b-2'><p className=" ">Hi, <a className=" font-[300] underline cursor-pointer" >Sign-in or register</a></p></li>
             {
               categoryAll && categoryAll.map((item, i) =>
-                <li key={i} onClick={() => { setDataSubcategory(item.Subcategory), setOpenSubcategory(!openSubcategory), setViewAll(item.id) }}
+                <li key={i} onClick={() => { setDataSubcategory(item.Subcategory), setOpenSubcategory(!openSubcategory), setViewAll(item.id),console.log(item.id);
+                 }}
                   className=' px-[30px] text-[1.2rem] tracking-[.05em] py-[10px] flex items-center justify-between border-b-2'
                 >{item.name}
                   <IoIosArrowForward /></li>)
@@ -182,7 +183,7 @@ function Header() {
           <div className={`absolute h-full w-full   duration-300 font-[300] z-50 top-0 bg-white ${openSubcategory ? 'translate-x-full' : "-translate-x-0"}`} >
             <ul >
               <li onClick={() => { setOpenSubcategory(!openSubcategory) }} className='px-[30px] py-[15px] text-[20px]'><FaArrowLeft /></li>
-              <li onClick={() => { toggleMenu(), navigate(`/product/${viewAll}`) }} className='block px-[30px] text-[1.2rem] tracking-[.05em] py-[10px] border-b-2'>View all</li>
+              <li onClick={() => { toggleMenu(), navigate(`/product/all/${viewAll}`) }} className='block px-[30px] text-[1.2rem] tracking-[.05em] py-[10px] border-b-2'>View all</li>
               {
                 DataSubcategory && DataSubcategory.map((item, i) => <li onClick={() => { toggleMenu(), navigate(`/product/${item.id}`) }} ><li key={i} className=' px-[30px] text-[1.2rem] tracking-[.05em] py-[10px] border-b-2'>{item.name}</li></li>)
               }
